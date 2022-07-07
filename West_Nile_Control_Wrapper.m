@@ -5,6 +5,8 @@ function [tau,ul,ua,X,J,J_comp,final_treatment_time,K] = West_Nile_Control_Wrapp
 %control:2, Host preservation: 3. 
 %larvicide_type: 1=long-lasting s-methorpene briquet, 2=VectoBac
 
+% test commit -brady
+
 p = System_parametersRL(larvicide_type,Tf);
 if Obj_type==1
 f=@(t,x)West_Nile_ModelRL(t,x,p);
