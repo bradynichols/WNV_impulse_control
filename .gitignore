@@ -6,3 +6,6 @@
 
 #ignore figure files
 *.eps
+
+#ignore matlab project files
+resources
