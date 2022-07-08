@@ -1,3 +1,5 @@
+% Includes host demographics
+
 %%%%Write on 6/9/2020, 
 %%%%To compute the basic reproduction number, R0, of a West Nile Virus
 %%%%Model
@@ -6,12 +8,12 @@
 %%%%%
 clear
 syms Hi Ei Li Ve Vi
-syms rs ri phi qs qi m_e m_l muL muV b C kl p_hm p_mh dh g gl ga km1 km2 cV d NH
+syms rs ri phi qs qi m_e m_l muL muV b C kl p_hm p_mh dh g gl ga km1 km2 cV d NH gamma % Included gamma
 %%%Compute Jacobian
 %%%%%F=new infections, V=transfer between compartments
 %%%%Only need to focus on infection compartments: [Hi Ei Li Ve Vi]
 Ffun=[p_mh*b*Vi, ri*Vi, 0, b*p_mh*m_l*Hi*C/(NH*muV), 0];
-Vfun=[-dh*Hi-g*Hi, -m_e*Ei, m_e*qi*phi*Ei-muL*Li-m_l*Li-d*Li, -kl*Ve-muV*Ve, m_l*Li+kl*Ve-muV*Vi];
+Vfun=[-dh*Hi-g*Hi-gamma*Hi, -m_e*Ei, m_e*qi*phi*Ei-muL*Li-m_l*Li-d*Li, -kl*Ve-muV*Ve, m_l*Li+kl*Ve-muV*Vi]; % Updated to include natural host death rate.
 %%%%Compute the jacobian with respect to infection compartments: [Hi Ei Li Ve Vi]
 FF=jacobian(Ffun, [Hi Ei Li Ve Vi]);
 VV=jacobian(Vfun, [Hi Ei Li Ve Vi]);

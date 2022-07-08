@@ -1,8 +1,8 @@
-% Test commit - Sally
+% Host Demographics Updated
 
 function [p] = System_parametersRL(larvicide_type, Tf)
 %parameter values for simulations
-p=zeros(1,29);
+p=zeros(1,31);
 
 %Vector
 p(1)=150/8; % egg laying rate of S and E mosquitoes
@@ -244,10 +244,16 @@ p(25) = 0.05;
 p(26)=5000;
 %cost of hosts at the final time
 %p(27)=-5000; 
-p(27)=-100000;%value used in paper simulations
+p(27)=-100000; %value used in paper simulations
 
 %maximum time between controls
 p(28)=Tf;
 %minimum time between controls
 p(29)=1;
+
+%host recruitment rate
+p(30) = 0.05
+%host natural death rate
+p(31) = 0.001
+
 end

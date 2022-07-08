@@ -1,5 +1,7 @@
+% Includes Host Demographics
+
 function [dxdt] = West_Nile_ModelRL(t,x,p)
-%This file gives the deriviates of the continuous state variables.
+%This file gives the derivatives of the continuous state variables.
 %x=[Es,Ei,Ls,Li,Vs,Ve,Vi,Hs,Hi,Hr,Ul,Ua,arti_state,reshape(dx/dx0,13^2,1)]
 %  Es = x(1);  Ei = x(2);  Ls = x(3);   Li = x(4); Vs=x(5); Ve=x(6); Vi=x(7)
 %  Hs = x(8);  Hi = x(9);  Hr = x(10); Ul=x(11), Ua=x(12), int_0^t{cV*(Vi(s)+Vs(s)+Ve(s))ds}=x(13)
@@ -13,7 +15,6 @@ x1=x(1:13);
 %     dx13/dx1(0), dx13/dx2(0), . . .,dx13/dx13(0)];
 x2=x(length(x1)+1:length(x1)+length(x1)^2);
 x2=reshape(x2,length(x1),length(x1));
-
 
 %Model Parameters
 
@@ -46,6 +47,9 @@ km2=p(20);
 
 
 cV=p(21);                   %weight of cost of vectors in objective functional
+
+Lambda = p(30) % Host recruitment rate
+gamma = p(31) % Host natural death rate
 
 d=((rs*m_l*qs/muV)-muL-m_l)/C;
     %State variables
@@ -80,22 +84,25 @@ d=((rs*m_l*qs/muV)-muL-m_l)/C;
     dVi = m_l*Li+kl*Ve-muV*Vi-km2*Vi*Ua;
 
     %Host ODEs
-    dHs = -b*p_mh*Vi*Hs/NH;     %
+    dHs = Lambda*Hs - b*p_mh*Vi*Hs/NH - gamma*Hs; % Includes host demographics
+ 
 %                        [V_i]*[prob of transmission]*[bites per unit time per mosquito]*[number of suceptibles]/[number of hosts]=
 %                           =transmission events per unit time.
 %                       Note the rate at which a host becomes infected increases with bite rate.
-    dHi = b*p_mh*Vi*Hs/NH-(dh+g)*Hi;
-    dHr = g*Hi;
+    dHi = b*p_mh*Vi*Hs/NH - (dh+g)*Hi - gamma*Hi; % Includes host demographics 
+    dHr = g*Hi - gamma*Hr; % Includes host demographics
     
     %Chemical ODEs
     dUl=-gl*Ul;
     dUa=-ga*Ua;
     
     %Integral State ODE
-    dx_int=cV*(Vi+Vs+Ve);
+    dx_int=cV*(Vi+Vs+Ve); 
 
 
 f=[dEs; dEi; dLs; dLi; dVs; dVe; dVi; dHs; dHi; dHr; dUl; dUa; dx_int];
+
+% Updated to include host demographics
 
 dfdx=[ -m_e, 0, 0, 0, rs, rs, 0, 0, 0, 0, 0, 0, 0;
         0, -m_e, 0, 0, 0, 0, ri, 0, 0, 0, 0, 0, 0;
@@ -104,14 +111,12 @@ dfdx=[ -m_e, 0, 0, 0, rs, rs, 0, 0, 0, 0, 0, 0, 0;
  0, 0, m_l, 0, -b*p_hm*Hi/NH-muV-km2*Ua, 0, 0, b*p_hm*Vs*Hi/(NH)^2, -b*p_hm*Vs/(NH)+b*p_hm*Vs*Hi/(NH)^2, b*p_hm*Vs*Hi/(NH)^2, 0, -km2*Vs, 0;
  0, 0, 0, 0, b*p_hm*Hi/NH, -kl-muV-km2*Ua, 0, -b*p_hm*Vs*Hi/(NH)^2, b*p_hm*Vs/(NH)-b*p_hm*Hi*Vs/(NH)^2, -b*p_hm*Vs*Hi/(NH)^2, 0, -km2*Ve, 0;
  0, 0, 0, m_l, 0, kl, -muV-km2*Ua, 0, 0, 0, 0, -km2*Vi, 0;
- 0, 0, 0, 0, 0, 0, -b*p_mh*Hs/NH, -b*p_mh*Vi/(NH)+b*p_mh*Vi*Hs/(NH)^2, b*p_mh*Vi*Hs/(NH)^2, b*p_mh*Vi*Hs/(NH)^2, 0, 0, 0;
- 0, 0, 0, 0, 0, 0, b*p_mh*Hs/NH, b*p_mh*Vi/(NH)-b*p_mh*Vi*Hs/(NH)^2, -b*p_mh*Vi*Hs/(NH)^2-(dh+g), -b*p_mh*Vi*Hs/(NH)^2, 0, 0, 0;
- 0, 0, 0,  0,  0,  0,  0,  0,  g,  0,  0,  0,  0;
+ 0, 0, 0, 0, 0, 0, -b*p_mh*Hs/NH, -b*p_mh*Vi/(NH)+b*p_mh*Vi*Hs/(NH)^2 + (Lambda - gamma), b*p_mh*Vi*Hs/(NH)^2, b*p_mh*Vi*Hs/(NH)^2, 0, 0, 0; % Hs updated.
+ 0, 0, 0, 0, 0, 0, b*p_mh*Hs/NH, b*p_mh*Vi/(NH)-b*p_mh*Vi*Hs/(NH)^2, -b*p_mh*Vi*Hs/(NH)^2-(dh + g + gamma), -b*p_mh*Vi*Hs/(NH)^2, 0, 0, 0; % Hi updated.
+ 0, 0, 0,  0,  0,  0,  0,  0,  g,  -gamma,  0,  0,  0; % Hr updated.
  0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  -gl, 0, 0;
  0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  0,  -ga,  0; 
  0, 0, 0,  0,  cV,  cV,  cV,  0,  0,  0,  0,  0,  0];
-
-
 
 dx2dt=dfdx*x2;
 
