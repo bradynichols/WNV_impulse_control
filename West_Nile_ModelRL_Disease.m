@@ -1,4 +1,4 @@
-% Includes host demographics
+% Updated 07-14-2022
 
 function [dxdt] = West_Nile_ModelRL_Disease(t,x,p)
 %This file gives the derivatives of the continuous state variables for the
@@ -53,6 +53,9 @@ cV=p(21);                   %weight of cost of vectors in objective functional
 Lambda = p(30) % Host recruitment rate
 gamma = p(31) % Host natural death rate
 
+omega = p(32) % Host-Host contact rate
+p_hh = p(33) %Host-Host transmission probability
+
 d=((rs*m_l*qs/muV)-muL-m_l)/C;
     %State variables
 
@@ -89,11 +92,11 @@ d=((rs*m_l*qs/muV)-muL-m_l)/C;
     dVi = m_l*Li+kl*Ve-muV*Vi-km2*Vi*Ua;
 
     %Host ODEs
-    dHs = Lambda*Hs - b*p_mh*Vi*Hs/NH - gamma*Hs; % Includes host demographics
+    dHs = Lambda*Hs - b*p_mh*Vi*Hs/NH - omega*p_hh*Hi*Hs/NH - gamma*Hs; % Includes host demographics
 %                        [V_i]*[prob of transmission]*[bites per unit time per mosquito]*[number of suceptibles]/[number of hosts]=
 %                           =transmission events per unit time.
 %                       Note the rate at which a host becomes infected increases with bite rate.
-    dHi = b*p_mh*Vi*Hs/NH-(dh+g)*Hi - gamma*Hi; % Includes host demographics
+    dHi = b*p_mh*Vi*Hs/NH-(dh+g)*Hi + omega*p_hh*Hi*Hs/NH - gamma*Hi; % Includes host demographics
     dHr = g*Hi - gamma*Hr; % Includes host demographics 
     
     %Chemical ODEs
@@ -115,9 +118,9 @@ dfdx=[ -m_e, 0, 0, 0, rs, rs, 0, 0, 0, 0, 0, 0, 0;
  0, 0, m_l, 0, -b*p_hm*Hi/NH-muV-km2*Ua, 0, 0, b*p_hm*Vs*Hi/(NH)^2, -b*p_hm*Vs/(NH)+b*p_hm*Vs*Hi/(NH)^2, b*p_hm*Vs*Hi/(NH)^2, 0, -km2*Vs, 0;
  0, 0, 0, 0, b*p_hm*Hi/NH, -kl-muV-km2*Ua, 0, -b*p_hm*Vs*Hi/(NH)^2, b*p_hm*Vs/(NH)-b*p_hm*Hi*Vs/(NH)^2, -b*p_hm*Vs*Hi/(NH)^2, 0, -km2*Ve, 0;
  0, 0, 0, m_l, 0, kl, -muV-km2*Ua, 0, 0, 0, 0, -km2*Vi, 0;
- 0, 0, 0, 0, 0, 0, -b*p_mh*Hs/NH, -b*p_mh*Vi/(NH)+b*p_mh*Vi*Hs/(NH)^2 + (Lambda - gamma), b*p_mh*Vi*Hs/(NH)^2, b*p_mh*Vi*Hs/(NH)^2, 0, 0, 0; % Hs Updated
- 0, 0, 0, 0, 0, 0, b*p_mh*Hs/NH, b*p_mh*Vi/(NH)-b*p_mh*Vi*Hs/(NH)^2, -b*p_mh*Vi*Hs/(NH)^2-(dh + g + gamma), -b*p_mh*Vi*Hs/(NH)^2, 0, 0, 0; % Hi Updated
- 0, 0, 0,  0,  0,  0,  0,  0,  g,  -gamma,  0,  0,  0; % Hr Updated
+ 0, 0, 0, 0, 0, 0, -b*p_mh*Hs/NH, -b*p_mh*Vi/(NH)+b*p_mh*Vi*Hs/(NH)^2 + (Lambda - gamma) - omega*p_hh*Hi/(NH) + omega*p_hh*Hi*Hs/(NH)^2, b*p_mh*Vi*Hs/(NH)^2 - omega*p_hh*Hs/(NH) + omega*p_hh*Hi*Hs/(NH)^2, b*p_mh*Vi*Hs/(NH)^2 + omega*p_hh*Hi*Hs/(NH)^2, 0, 0, 0; % Hs updated 07-14-2022
+ 0, 0, 0, 0, 0, 0, b*p_mh*Hs/NH, b*p_mh*Vi/(NH)-b*p_mh*Vi*Hs/(NH)^2 + omega*p_hh*Hi/(NH) - omega*p_hh*Hi*Hs/(NH)^2, - b*p_mh*Vi*Hs/(NH)^2-(dh + g + gamma) + omega*p_hh*Hs/(NH) - omega*p_hh*Hi*Hs/(NH)^2, -b*p_mh*Vi*Hs/(NH)^2 - omega*p_hh*Hi*Hs/(NH)^2, 0, 0, 0; % Hi updated 07-14-2022
+ 0, 0, 0,  0,  0,  0,  0,  0,  g,  -gamma,  0,  0,  0; % Hr updated.
  0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  -gl, 0, 0;
  0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  0,  -ga,  0; 
  0, 0, 0,  0,  0,  0,  1,  0,  1,  0,  0,  0,  0];

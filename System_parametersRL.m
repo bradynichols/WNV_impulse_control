@@ -1,4 +1,5 @@
-% Host Demographics Updated
+% Host Demographics Updated - Host recruitment, natural death
+% Host-to-Host transmission rate and Host-Host contact rate included
 
 function [p] = System_parametersRL(larvicide_type, Tf)
 %parameter values for simulations
@@ -252,8 +253,14 @@ p(28)=Tf;
 p(29)=1;
 
 %host recruitment rate
-p(30) = 0.05
+p(30) = 0
 %host natural death rate
-p(31) = 0.001
+p(31) = 0
+
+%Host-to-Host Contact Rate
+p(32) = 0
+%Host-to-Host Transmission Probability
+p(33) = 0
+
 
 end

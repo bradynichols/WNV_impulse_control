@@ -1,4 +1,4 @@
-% Includes host demographics
+% Updated 07-14-2022
 
 %%%%Write on 6/9/2020, 
 %%%%To compute the basic reproduction number, R0, of a West Nile Virus
@@ -8,12 +8,12 @@
 %%%%%
 clear
 syms Hi Ei Li Ve Vi
-syms rs ri phi qs qi m_e m_l muL muV b C kl p_hm p_mh dh g gl ga km1 km2 cV d NH gamma % Included gamma
+syms rs ri phi qs qi m_e m_l muL muV b C kl p_hm p_mh dh g gl ga km1 km2 cV d NH gamma omega p_hh % Included gamma, omega, p_hh
 %%%Compute Jacobian
 %%%%%F=new infections, V=transfer between compartments
 %%%%Only need to focus on infection compartments: [Hi Ei Li Ve Vi]
-Ffun=[p_mh*b*Vi, ri*Vi, 0, b*p_mh*m_l*Hi*C/(NH*muV), 0];
-Vfun=[-dh*Hi-g*Hi-gamma*Hi, -m_e*Ei, m_e*qi*phi*Ei-muL*Li-m_l*Li-d*Li, -kl*Ve-muV*Ve, m_l*Li+kl*Ve-muV*Vi]; % Updated to include natural host death rate.
+Ffun=[p_mh*b*Vi + omega*p_hh*Hi, ri*Vi, 0, b*p_mh*m_l*Hi*C/(NH*muV), 0]; % Updated to inlcude new interaction term % + omega*p_hh*Hi % 
+Vfun=[-dh*Hi-g*Hi - gamma*Hi, -m_e*Ei, m_e*qi*phi*Ei-muL*Li-m_l*Li-d*Li, -kl*Ve-muV*Ve, m_l*Li+kl*Ve-muV*Vi]; % Updated to include gamma %-gamma*Hi% 
 %%%%Compute the jacobian with respect to infection compartments: [Hi Ei Li Ve Vi]
 FF=jacobian(Ffun, [Hi Ei Li Ve Vi]);
 VV=jacobian(Vfun, [Hi Ei Li Ve Vi]);
@@ -69,6 +69,12 @@ cV=p(21);                   %weight of cost of vectors in objective functional
 d=((rs*m_l*qs/muV)-muL-m_l)/C;
 
 NH=p(22);
+
+
+gamma = p(31) % Host natural death rate
+omega = p(32) %Host-to-Host Contact Rate
+p_hh =    p(33) %Host-to-Host Transmission Probability
+
 
 %%%%eivenvalues are copied from  eig=solve(p, lambda)
 sol1=double(subs(eigen_values(1)));
