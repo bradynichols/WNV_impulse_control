@@ -67,11 +67,11 @@ p(11)=.01;       %residential area; see paper for references MOSQUITO (LARVAE) C
         
 p(12) = 1/10;  %disease progression in mosquitoes (1/latency period)
 %Cite West Nile Virus Infection Decreases Fecundity of Culex tarsalis Females
-p(13) = 0.5;   %host-to-mosquito transmission
-p(14) = 0.3083947254;   %mosquito-to-host transmission
+p(14) = 0.5;   %host-to-mosquito transmission
+p(13) = 0.3111312377;   %mosquito-to-host transmission
 %cite West Nile Virus Infection Decreases Fecundity of Culex tarsalis Females
-p(15) = 0.01611839157;   %WNV-induced death rate. This is just an estimate. Cite Komar (see below).
-p(16) = 0.1127071048;   %host recovery rate (1/infection period), 
+p(15) = 0.01672790387;   %WNV-induced death rate. This is just an estimate. Cite Komar (see below).
+p(16) = 0.1121256665;   %host recovery rate (1/infection period), 
                %Viremia was detectable for up to seven days post inoculation.
                % Cite Komar,Experimental Infection of North American Birds with
                % the New York 1999 Strain of West Nile Virus
@@ -255,16 +255,16 @@ p(28)=Tf;
 p(29)=1;
 
 %Host recruitment rate
-p(30) = 0.003984865468
+p(30) = 0.003952915781;
 %Host natural death rate
-p(31) = 0.001997092884
+p(31) = 0.001993512447;
 
 %Host-to-Host Contact Rate
-p(32) = 2.57/7
+p(32) = 2.5768/7;
 %Host-to-Host Transmission Probability
-p(33) = 0.02946515231
+p(33) = 0.02960806276;
 
 %Host Carrying Capacity
-p(34) = 0.0015
+p(34) = 0.015;
 
 end

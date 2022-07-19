@@ -100,8 +100,8 @@ d_h = (Lambda - gamma)/c_h; % density-dependent death rate for host
 %                        [V_i]*[prob of transmission]*[bites per unit time per mosquito]*[number of suceptibles]/[number of hosts]=
 %                           =transmission events per unit time.
 %                       Note the rate at which a host becomes infected increases with bite rate.
-    dHi = b*p_mh*Vi*Hs/NH + omega*p_hh*Hi*Hs/NH - (dh+g)*Hi - d_h*NH*Hs - gamma*Hi; % Updated 07/19/2022
-    dHr = g*Hi - d_h*NH*Hs - gamma*Hr; % Updated 07/19/2022 
+    dHi = b*p_mh*Vi*Hs/NH + omega*p_hh*Hi*Hs/NH - (dh+g)*Hi - d_h*NH*Hi - gamma*Hi; % Updated 07/19/2022
+    dHr = g*Hi - d_h*NH*Hr - gamma*Hr; % Updated 07/19/2022 
     
     %Chemical ODEs
     dUl=-gl*Ul;
