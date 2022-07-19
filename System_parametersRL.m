@@ -1,6 +1,7 @@
 % Host Demographics Updated - Host recruitment, natural death
 % Host-to-Host transmission rate and Host-Host contact rate included
 % 07/18/2022 - Updated to include host carrying capacity, p(34)
+% test commit with new branch -brady, 7/19
 
 function [p] = System_parametersRL(larvicide_type, Tf)
 %parameter values for simulations
