@@ -35,7 +35,7 @@ function [tt,x] = West_Nile_Model_run(larvicide_type)
 %Model Parameters
 %generate parameters
 %Duration of simulation
-Tf=200;
+Tf=150;
 p = System_parametersRL(larvicide_type,Tf);
 
 % Initial conditions for discrete/continuous state variables
@@ -46,11 +46,10 @@ rs = p(1);            %intrinsic rate of increase of uninfected mosquitoes
 m_e = p(6);              %egg maturatation rate
 m_l = p(7);             %larval maturation rate
 muV=p(9);             %adult death rate
-c_l = p(11);             %mosquito carrying capacity
-c_h = p(34);          % host carrying capacity
+C = p(11);             %mosquito carrying capacity
 
-ic_V=m_l*c_l/muV;
-ic_E=rs*m_l*c_l/(m_e*muV);
+ic_V=m_l*C/muV;
+ic_E=rs*m_l*C/(m_e*muV);
 
 NH=p(22);
 
@@ -58,9 +57,11 @@ NH=p(22);
 %healthy, summer ic. starts from DFE%
 %ic = [ic_E;0;C;0;ic_V;0;0;NH;0;0;0;0;0];
 %diseased
-ic = [ic_E;0;c_l;0;ic_V;0;.01*ic_V;NH;0;0;0;0;0];
+ic = [ic_E;0;C;0;ic_V;0;.01*ic_V;NH;0;0;0;0;0];
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 
 X01=ic;
 %the derivative of the state with respect to its initial condition is intially one,
@@ -71,7 +72,7 @@ X0=[X01; X02];
 f=@(t,x)West_Nile_ModelRL(t,x,p);
 
 %solve the state equations
-[tt,x]=ode23(f,[0,Tf],X0);
+[tt,x]=ode45(f,[0,Tf],X0);
 
 West_Nile_Model_plots(tt,x,0,[],[],Tf,[],[],larvicide_type);
 end

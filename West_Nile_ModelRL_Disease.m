@@ -50,13 +50,17 @@ km2=p(20);
 
 cV=p(21);                   %weight of cost of vectors in objective functional
 
-Lambda = p(30) % Host recruitment rate
-gamma = p(31) % Host natural death rate
+Lambda = p(30); % Host recruitment rate
+gamma = p(31); % Host natural death rate
 
-omega = p(32) % Host-Host contact rate
-p_hh = p(33) %Host-Host transmission probability
+omega = p(32); % Host-Host contact rate
+p_hh = p(33); %Host-Host transmission probability
 
-d=((rs*m_l*qs/muV)-muL-m_l)/C;
+p(34) = c_h; % Host carrying capacity
+
+d_l=((rs*m_l*qs/muV)-muL-m_l)/c_l; % density-dependent death rate for larvae
+d_h = (Lambda - gamma)/c_h; % density-dependent death rate for host
+
     %State variables
 
     %Vector
@@ -92,12 +96,12 @@ d=((rs*m_l*qs/muV)-muL-m_l)/C;
     dVi = m_l*Li+kl*Ve-muV*Vi-km2*Vi*Ua;
 
     %Host ODEs
-    dHs = Lambda*Hs - b*p_mh*Vi*Hs/NH - omega*p_hh*Hi*Hs/NH - gamma*Hs; % Includes host demographics
+    dHs = Lambda*Hs - b*p_mh*Vi*Hs/NH - omega*p_hh*Hi*Hs/NH - d_h*NH*Hs - gamma*Hs; % Updated 07/19/2022
 %                        [V_i]*[prob of transmission]*[bites per unit time per mosquito]*[number of suceptibles]/[number of hosts]=
 %                           =transmission events per unit time.
 %                       Note the rate at which a host becomes infected increases with bite rate.
-    dHi = b*p_mh*Vi*Hs/NH-(dh+g)*Hi + omega*p_hh*Hi*Hs/NH - gamma*Hi; % Includes host demographics
-    dHr = g*Hi - gamma*Hr; % Includes host demographics 
+    dHi = b*p_mh*Vi*Hs/NH + omega*p_hh*Hi*Hs/NH - (dh+g)*Hi - d_h*NH*Hs - gamma*Hi; % Updated 07/19/2022
+    dHr = g*Hi - d_h*NH*Hs - gamma*Hr; % Updated 07/19/2022 
     
     %Chemical ODEs
     dUl=-gl*Ul;
@@ -118,9 +122,9 @@ dfdx=[ -m_e, 0, 0, 0, rs, rs, 0, 0, 0, 0, 0, 0, 0;
  0, 0, m_l, 0, -b*p_hm*Hi/NH-muV-km2*Ua, 0, 0, b*p_hm*Vs*Hi/(NH)^2, -b*p_hm*Vs/(NH)+b*p_hm*Vs*Hi/(NH)^2, b*p_hm*Vs*Hi/(NH)^2, 0, -km2*Vs, 0;
  0, 0, 0, 0, b*p_hm*Hi/NH, -kl-muV-km2*Ua, 0, -b*p_hm*Vs*Hi/(NH)^2, b*p_hm*Vs/(NH)-b*p_hm*Hi*Vs/(NH)^2, -b*p_hm*Vs*Hi/(NH)^2, 0, -km2*Ve, 0;
  0, 0, 0, m_l, 0, kl, -muV-km2*Ua, 0, 0, 0, 0, -km2*Vi, 0;
- 0, 0, 0, 0, 0, 0, -b*p_mh*Hs/NH, -b*p_mh*Vi/(NH)+b*p_mh*Vi*Hs/(NH)^2 + (Lambda - gamma) - omega*p_hh*Hi/(NH) + omega*p_hh*Hi*Hs/(NH)^2, b*p_mh*Vi*Hs/(NH)^2 - omega*p_hh*Hs/(NH) + omega*p_hh*Hi*Hs/(NH)^2, b*p_mh*Vi*Hs/(NH)^2 + omega*p_hh*Hi*Hs/(NH)^2, 0, 0, 0; % Hs updated 07-14-2022
- 0, 0, 0, 0, 0, 0, b*p_mh*Hs/NH, b*p_mh*Vi/(NH)-b*p_mh*Vi*Hs/(NH)^2 + omega*p_hh*Hi/(NH) - omega*p_hh*Hi*Hs/(NH)^2, - b*p_mh*Vi*Hs/(NH)^2-(dh + g + gamma) + omega*p_hh*Hs/(NH) - omega*p_hh*Hi*Hs/(NH)^2, -b*p_mh*Vi*Hs/(NH)^2 - omega*p_hh*Hi*Hs/(NH)^2, 0, 0, 0; % Hi updated 07-14-2022
- 0, 0, 0,  0,  0,  0,  0,  0,  g,  -gamma,  0,  0,  0; % Hr updated.
+ 0, 0, 0, 0, 0, 0, -b*p_mh*Hs/NH, Lambda - gamma - Hs*d_h - d_h*(NH) - (Hi*omega*p_hh)/(NH) - (Vi*b*p_mh)/(NH) + (Hi*Hs*omega*p_hh)/(NH)^2 + (Hs*Vi*b*p_mh)/(NH)^2, (Hi*Hs*omega*p_hh)/(NH)^2 - (Hs*omega*p_hh)/(NH) - Hs*d_h + (Hs*Vi*b*p_mh)/(NH)^2, (Hi*Hs*omega*p_hh)/(NH)^2 - Hs*d_h + (Hs*Vi*b*p_mh)/(NH)^2, 0, 0, 0; % Hs updated 07-19-2022
+ 0, 0, 0, 0, 0, 0, b*p_mh*Hs/NH, (Hi*omega*p_hh)/(NH) - d_h*(NH) - Hs*d_h + (Vi*b*p_mh)/(NH) - (Hi*Hs*omega*p_hh)/(NH)^2 - (Hs*Vi*b*p_mh)/(NH)^2, (Hs*omega*p_hh)/(NH) - g - gamma - Hs*d_h - dh - (Hi*Hs*omega*p_hh)/(NH)^2 - (Hs*Vi*b*p_mh)/(NH)^2, - Hs*d_h - (Hi*Hs*omega*p_hh)/(NH)^2 - (Hs*Vi*b*p_mh)/(NH)^2, 0, 0, 0; % Hi updated 07-19-2022
+ 0, 0, 0,  0,  0,  0,  0,  - Hs*d_h - d_h*(NH),  g - Hs*d_h,  - gamma - Hs*d_h,  0,  0,  0; % Hr updated 07/19/2022.
  0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  -gl, 0, 0;
  0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  0,  -ga,  0; 
  0, 0, 0,  0,  0,  0,  1,  0,  1,  0,  0,  0,  0];

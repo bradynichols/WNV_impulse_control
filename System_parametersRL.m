@@ -1,5 +1,6 @@
 % Host Demographics Updated - Host recruitment, natural death
 % Host-to-Host transmission rate and Host-Host contact rate included
+% 07/18/2022 - Updated to include host carrying capacity, p(34)
 
 function [p] = System_parametersRL(larvicide_type, Tf)
 %parameter values for simulations
@@ -57,7 +58,8 @@ p(10) = 1/5;   %mosquito biting rate. It seems reasonable to assume a
 %               pipiens life history traits to temperature
 %p(11) = 22;    %per m^2 (in a larval habitat) see Fillinger
                 %mosquito larval carrying capacity. 
-p(11)=.01;       %residential area; see paper for references 
+
+p(11)=.01;       %residential area; see paper for references MOSQUITO (LARVAE) CARRYING CAPACITY
 
 %               Note that culex mosquitoes may be primarily breeding in 
 %               drainage basins and ditches.
@@ -66,10 +68,10 @@ p(11)=.01;       %residential area; see paper for references
 p(12) = 1/10;  %disease progression in mosquitoes (1/latency period)
 %Cite West Nile Virus Infection Decreases Fecundity of Culex tarsalis Females
 p(13) = 0.5;   %host-to-mosquito transmission
-p(14) = 0.5;   %mosquito-to-host transmission
+p(14) = 0.3083947254;   %mosquito-to-host transmission
 %cite West Nile Virus Infection Decreases Fecundity of Culex tarsalis Females
-p(15) = 1/5;   %WNV-induced death rate. This is just an estimate. Cite Komar (see below).
-p(16) = 1/7;   %host recovery rate (1/infection period), 
+p(15) = 0.01611839157;   %WNV-induced death rate. This is just an estimate. Cite Komar (see below).
+p(16) = 0.1127071048;   %host recovery rate (1/infection period), 
                %Viremia was detectable for up to seven days post inoculation.
                % Cite Komar,Experimental Infection of North American Birds with
                % the New York 1999 Strain of West Nile Virus
@@ -209,7 +211,7 @@ p(20)=-log(0.1)*p(18)*2;
 per_remain_one_hour=exp(p(20)*0.5*exp(-p(18)/24)/p(18)-p(20)*0.5/p(18));
 
 
-p(22)=.00153; % population desnity of avian species in a residential area
+p(22)=.00153; % population density of avian species in a residential area
 
 %urban bird densities varied between 
 %281 birds / 10 ha = 281 birds / 100,000 m^2 = 0.0028 birds/m^2 and 
@@ -252,15 +254,17 @@ p(28)=Tf;
 %minimum time between controls
 p(29)=1;
 
-%host recruitment rate
-p(30) = 0
-%host natural death rate
-p(31) = 0
+%Host recruitment rate
+p(30) = 0.003984865468
+%Host natural death rate
+p(31) = 0.001997092884
 
 %Host-to-Host Contact Rate
-p(32) = 0
+p(32) = 2.57/7
 %Host-to-Host Transmission Probability
-p(33) = 0
+p(33) = 0.02946515231
 
+%Host Carrying Capacity
+p(34) = 0.0015
 
 end
