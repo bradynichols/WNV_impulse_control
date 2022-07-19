@@ -69,11 +69,12 @@ cV=p(21);                   %weight of cost of vectors in objective functional
 
 NH=p(22);
 
+Lambda = p(30)
 gamma = p(31) % Host natural death rate
 omega = p(32) %Host-to-Host Contact Rate
 p_hh =    p(33) %Host-to-Host Transmission Probability
 
-p(34) = c_h % Host carrying capacity
+c_h = p(34) % Host carrying capacity
 
 d_l=((rs*m_l*qs/muV)-muL-m_l)/c_l; % density-dependent death rate for larvae
 d_h = (Lambda - gamma)/c_h % density-dependent death rate for host
