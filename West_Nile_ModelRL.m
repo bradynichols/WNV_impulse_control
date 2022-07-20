@@ -112,27 +112,27 @@ Ua = x(18); % adultacide
 
 NH = Hs+Hi+Hr; % total hosts
 
-% Vector ODEs - NEEDS UPDATE
+% Vector ODEs % updated 7/20/2022
 
 dEs = rs*(Vs+Ve)-m_e*Es;
 dEi = ri*(Vi)-m_e*Ei;
-dLs = m_e*qs*Es+m_e*qi*(1-phi)*Ei-muL*Ls-m_l*Ls-d_l*Ls*(Ls+Li)-km1*Ls*Ul;
-dLi = m_e*qi*phi*Ei-muL*Li-m_l*Li-d_l*Li*(Li+Ls)-km1*Li*Ul;
-dVs = m_l*Ls-b*p_hm*Vs*Hi/NH-muV*Vs-km2*Vs*Ua;
-dVe = b*p_hm*Vs*Hi/NH-kl*Ve-muV*Ve-km2*Ve*Ua;
-dVi = m_l*Li+kl*Ve-muV*Vi-km2*Vi*Ua;
+dLs = m_e*qs*Es + m_e*qi*(1-phi)*Ei - muL*Ls - m_l*Ls - d*Ls*(Ls+Li) - km1*Ls*Ul;
+dLi = m_e*qi*phi*Ei - muL*Li - m_l*Li - d*Li*(Li+Ls) - km1*Li*Ul;
+dVs = m_l*Ls - b*p_hm1*Vs*Hi1/NH1 - b*p_hm2*Vs*Hi2/NH2 - b*p_hm3*Vs*Hi3/NH3 - muV*Vs - km2*Vs*Ua;
+dVe = b*p_hm1*Vs*Hi1/NH1 + b*p_hm2*Vs*Hi2/NH2 + b*p_hm3*Vs*Hi3/NH3 - kl*Ve - muV*Ve - km2*Ve*Ua;
+dVi = m_l*Li + kl*Ve - muV*Vi - km2*Vi*Ua;
 
-% Host ODEs - NEEDS UPDATE
+% Host ODEs
 
-dHs1 = Lambda*Hs - b*p_mh*Vi*Hs/NH - omega*p_hh*Hi*Hs/NH - d_h*NH*Hs - gamma*Hs; % Updated 07/19/2022
-dHs2 = 
-dHs3 = 
-dHi1 = b*p_mh*Vi*Hs/NH + omega*p_hh*Hi*Hs/NH - (dh+g)*Hi - d_h*NH*Hi - gamma*Hi; % Updated 07/19/2022
-dHi2 = 
-dHi3 = 
-dHr1 = g*Hi - d_h*NH*Hr - gamma*Hr; % Updated 07/19/2022
-dHr2 = 
-dHr3 = 
+dHs1 = Lambda1*Hs1 - b*p_mh*Vi*Hs1/NH1 - omega1*p_hh1*Hi1*Hs1/NH1 - d_h1*NH1*Hs1 - mu1*Hs1; % Updated 07/20/2022
+dHs2 = Lambda2*Hs2 - b*p_mh*Vi*Hs2/NH2 - omega2*p_hh2*Hi2*Hs2/NH2 - d_h2*NH2*Hs2 - mu2*Hs2;
+dHs3 = Lambda3*Hs3 - b*p_mh*Vi*Hs3/NH3 - omega3*p_hh3*Hi3*Hs3/NH3 - d_h3*NH3*Hs3 - mu3*Hs3;
+dHi1 = b*p_mh*Vi*Hs1/NH1 + omega1*p_hh1*Hi1*Hs1/NH1 - (gamma1+g1)*Hi1 - d_h1*NH1*Hi1 - gamma1*Hi1; % Updated 07/20/2022
+dHi2 = b*p_mh*Vi*Hs2/NH2 + omega2*p_hh2*Hi2*Hs2/NH2 - (gamma2+g2)*Hi2 - d_h2*NH2*Hi2 - gamma2*Hi2;
+dHi3 = b*p_mh*Vi*Hs3/NH3 + omega3*p_hh3*Hi3*Hs3/NH3 - (gamma3+g3)*Hi3 - d_h3*NH3*Hi3 - gamma3*Hi3;
+dHr1 = g*Hi1 - d_h1*NH1*Hr1 - gamma1*Hr1; % Updated 07/20/2022
+dHr2 = g*Hi2 - d_h2*NH2*Hr2 - gamma2*Hr2;
+dHr3 = g*Hi3 - d_h3*NH3*Hr3 - gamma3*Hr3;
     
 %Chemical ODEs
 
