@@ -74,7 +74,6 @@ km2 = p(40); % max rate at which adulticide kills adult vectors
 gl = p(39); % larvicide decay rate
 ga = p(41); % adulticide decay rate
 
-p(42) = 5000;
 cV = p(42); % weight of cost of vectors in objective functional
 
 d_l=((rs*m_l*qs/muV)-muL-m_l)/c_l; % density-dependent death rate for larvae
@@ -112,8 +111,8 @@ Ul = x(17); % larvacide
 Ua = x(18); % adultacide
 
 NH1 = Hs1 + Hi1 + Hr1; % total hosts group 1
-NH2 = Hs2 + Hi2 + Hr2 % total hosts group 2
-NH3 = Hs3 + Hi3 + Hr3 % total hosts group 3
+NH2 = Hs2 + Hi2 + Hr2; % total hosts group 2
+NH3 = Hs3 + Hi3 + Hr3; % total hosts group 3
 
 % Vector ODEs % updated 7/20/2022
 

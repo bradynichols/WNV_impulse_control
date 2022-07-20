@@ -111,8 +111,8 @@ Ul = x(17); % larvacide
 Ua = x(18); % adultacide
 
 NH1 = Hs1 + Hi1 + Hr1; % total hosts group 1
-NH2 = Hs2 + Hi2 + Hr2 % total hosts group 2
-NH3 = Hs3 + Hi3 + Hr3 % total hosts group 3
+NH2 = Hs2 + Hi2 + Hr2; % total hosts group 2
+NH3 = Hs3 + Hi3 + Hr3; % total hosts group 3
 
 % Vector ODEs % updated 7/20/2022
 
