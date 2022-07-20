@@ -54,11 +54,15 @@ ic_E=rs*m_l*c_l/(m_e*muV);
 
 NH=p(22);
 
+c_h1 = p(35);
+c_h2 = p(36);
+c_h3 = p(37);
+
 % Initial conditions for discrete/continuous state variables
 %healthy, summer ic. starts from DFE%
 %ic = [ic_E;0;C;0;ic_V;0;0;NH;0;0;0;0;0];
 %diseased
-ic = [ic_E;0;c_l;0;ic_V;0;.01*ic_V;NH;0;0;0;0;0];
+ic = [ic_E;0;c_l;0;ic_V;0;.01*ic_V;c_h1;c_h2;c_h3;0;0;0;0;0;0;0;0;0];
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

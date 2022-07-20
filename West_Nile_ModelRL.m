@@ -72,7 +72,7 @@ km2 = p(40); % max rate at which adulticide kills adult vectors
 gl = p(39); % larvicide decay rate
 ga = p(41); % adulticide decay rate
 
-cV = p(42) = 5000; % weight of cost of vectors in objective functional
+cV = p(42); % weight of cost of vectors in objective functional
 
 d_l=((rs*m_l*qs/muV)-muL-m_l)/c_l; % density-dependent death rate for larvae
 d_h1 = (Lambda1 - mu_h1)/c_h1; % density-dependent death rate for host group 1
@@ -118,8 +118,8 @@ NH3 = Hs3 + Hi3 + Hr3 % total hosts group 3
 
 dEs = rs*(Vs+Ve)-m_e*Es;
 dEi = ri*(Vi)-m_e*Ei;
-dLs = m_e*qs*Es + m_e*qi*(1-phi)*Ei - muL*Ls - m_l*Ls - d*Ls*(Ls+Li) - km1*Ls*Ul;
-dLi = m_e*qi*phi*Ei - muL*Li - m_l*Li - d*Li*(Li+Ls) - km1*Li*Ul;
+dLs = m_e*qs*Es + m_e*qi*(1-phi)*Ei - muL*Ls - m_l*Ls - d_l*Ls*(Ls+Li) - km1*Ls*Ul;
+dLi = m_e*qi*phi*Ei - muL*Li - m_l*Li - d_l*Li*(Li+Ls) - km1*Li*Ul;
 dVs = m_l*Ls - b*p_hm1*Vs*Hi1/NH1 - b*p_hm2*Vs*Hi2/NH2 - b*p_hm3*Vs*Hi3/NH3 - muV*Vs - km2*Vs*Ua;
 dVe = b*p_hm1*Vs*Hi1/NH1 + b*p_hm2*Vs*Hi2/NH2 + b*p_hm3*Vs*Hi3/NH3 - kl*Ve - muV*Ve - km2*Ve*Ua;
 dVi = m_l*Li + kl*Ve - muV*Vi - km2*Vi*Ua;
