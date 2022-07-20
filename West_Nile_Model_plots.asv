@@ -103,13 +103,13 @@ else
     exportgraphics(gcf,file_name)
 end
 
-% Plots suscpetible host populations
+% Plots all susceptible host populations:
 
 hold off
 figure
 hold on
-plot(tt,x(:,8:10),'LineWidth', 4)
-legend('H_1s', 'H_2s', 'H_3s', 'FontSize', 12);
+plot(tt,x(:,),'LineWidth',4)
+legend('H_1s','H_1i','H_1r','FontSize', 12);
 xlabel('time (days)', 'FontSize', 12);
 ylabel('density (ind/m^2)', 'FontSize', 12);
 if control_type==1
@@ -128,136 +128,11 @@ else
     title(figure_title)
     exportgraphics(gcf,file_name)
 end
-
-% Plots infected host population
-
-hold off
-figure
-hold on
-plot(tt,x(:,11:13),'LineWidth', 4)
-legend('H_1i', 'H_2i', 'H_3i', 'FontSize', 12);
-xlabel('time (days)', 'FontSize', 12);
-ylabel('density (ind/m^2)', 'FontSize', 12);
-if control_type==1
-    file_name=sprintf('hosts_fixed_times_T=%.2f_N=%.2f_Obj_fun=%.0f.eps',Tf,N,Obj_type);
-    figure_title=sprintf('hosts with fixed-time control (N = %.2f, T = %.2f, Obj fun = %.0f)',N,Tf,Obj_type);
-    title(figure_title)
-    exportgraphics(gcf,file_name)
-elseif control_type==2
-    file_name=sprintf('hosts_variable_times_T=%.2f_N=%.2f_Obj_fun=%.0f.eps',Tf,N,Obj_type);
-    figure_title=sprintf('hosts with variable-time control (N = %.2f, T = %.2f, Obj fun = %.0f)',N,Tf,Obj_type);
-    title(figure_title)
-    exportgraphics(gcf,file_name)
-else 
-    file_name=sprintf('hosts_no_control_T=%.2f.eps',Tf);
-    figure_title=sprintf('host density without control');
-    title(figure_title)
-    exportgraphics(gcf,file_name)
-end
-
-% Plots recovered host population
-
-hold off
-figure
-hold on
-plot(tt,x(:,14:16),'LineWidth', 4)
-legend('H_1r', 'H_2r', 'H_3r', 'FontSize', 12);
-xlabel('time (days)', 'FontSize', 12);
-ylabel('density (ind/m^2)', 'FontSize', 12);
-if control_type==1
-    file_name=sprintf('hosts_fixed_times_T=%.2f_N=%.2f_Obj_fun=%.0f.eps',Tf,N,Obj_type);
-    figure_title=sprintf('hosts with fixed-time control (N = %.2f, T = %.2f, Obj fun = %.0f)',N,Tf,Obj_type);
-    title(figure_title)
-    exportgraphics(gcf,file_name)
-elseif control_type==2
-    file_name=sprintf('hosts_variable_times_T=%.2f_N=%.2f_Obj_fun=%.0f.eps',Tf,N,Obj_type);
-    figure_title=sprintf('hosts with variable-time control (N = %.2f, T = %.2f, Obj fun = %.0f)',N,Tf,Obj_type);
-    title(figure_title)
-    exportgraphics(gcf,file_name)
-else 
-    file_name=sprintf('hosts_no_control_T=%.2f.eps',Tf);
-    figure_title=sprintf('host density without control');
-    title(figure_title)
-    exportgraphics(gcf,file_name)
-end
-
 
 hold off 
 figure
 hold on
-plot(tt,x(:,8), tt, x(:,9), tt, x(:,10),'LineWidth',4)
-legend('h_1s','h_2s','h_3s','FontSize', 12);
-xlabel('time (days)', 'FontSize', 12);
-ylabel('density (ind/m^2)', 'FontSize', 12);
-if control_type==1
-    file_name=sprintf('hosts_fixed_times_T=%.2f_N=%.2f_Obj_fun=%.0f.eps',Tf,N,Obj_type);
-    figure_title=sprintf('hosts with fixed-time control (N = %.2f, T = %.2f, Obj fun = %.0f)',N,Tf,Obj_type);
-    title(figure_title)
-    exportgraphics(gcf,file_name)
-elseif control_type==2
-    file_name=sprintf('hosts_variable_times_T=%.2f_N=%.2f_Obj_fun=%.0f.eps',Tf,N,Obj_type);
-    figure_title=sprintf('hosts with variable-time control (N = %.2f, T = %.2f, Obj fun = %.0f)',N,Tf,Obj_type);
-    title(figure_title)
-    exportgraphics(gcf,file_name)
-else 
-    file_name=sprintf('hosts_no_control_T=%.2f.eps',Tf);
-    figure_title=sprintf('host density without control');
-    title(figure_title)
-    exportgraphics(gcf,file_name)
-end
-hold off 
-figure
-hold on
-%
-plot(tt,x(:,11), tt, x(:,12), tt, x(:,13),'LineWidth',4)
-legend('h_1i','h_2i','h_3i','FontSize', 12);
-xlabel('time (days)', 'FontSize', 12);
-ylabel('density (ind/m^2)', 'FontSize', 12);
-if control_type==1
-    file_name=sprintf('hosts_fixed_times_T=%.2f_N=%.2f_Obj_fun=%.0f.eps',Tf,N,Obj_type);
-    figure_title=sprintf('hosts with fixed-time control (N = %.2f, T = %.2f, Obj fun = %.0f)',N,Tf,Obj_type);
-    title(figure_title)
-    exportgraphics(gcf,file_name)
-elseif control_type==2
-    file_name=sprintf('hosts_variable_times_T=%.2f_N=%.2f_Obj_fun=%.0f.eps',Tf,N,Obj_type);
-    figure_title=sprintf('hosts with variable-time control (N = %.2f, T = %.2f, Obj fun = %.0f)',N,Tf,Obj_type);
-    title(figure_title)
-    exportgraphics(gcf,file_name)
-else 
-    file_name=sprintf('hosts_no_control_T=%.2f.eps',Tf);
-    figure_title=sprintf('host density without control');
-    title(figure_title)
-    exportgraphics(gcf,file_name)
-end
-hold off 
-figure
-hold on
-%
-plot(tt,x(:,14), tt, x(:,15), tt, x(:,16),'LineWidth',4)
-legend('h_1r','h_2r','h_3r','FontSize', 12);
-xlabel('time (days)', 'FontSize', 12);
-ylabel('density (ind/m^2)', 'FontSize', 12);
-if control_type==1
-    file_name=sprintf('hosts_fixed_times_T=%.2f_N=%.2f_Obj_fun=%.0f.eps',Tf,N,Obj_type);
-    figure_title=sprintf('hosts with fixed-time control (N = %.2f, T = %.2f, Obj fun = %.0f)',N,Tf,Obj_type);
-    title(figure_title)
-    exportgraphics(gcf,file_name)
-elseif control_type==2
-    file_name=sprintf('hosts_variable_times_T=%.2f_N=%.2f_Obj_fun=%.0f.eps',Tf,N,Obj_type);
-    figure_title=sprintf('hosts with variable-time control (N = %.2f, T = %.2f, Obj fun = %.0f)',N,Tf,Obj_type);
-    title(figure_title)
-    exportgraphics(gcf,file_name)
-else 
-    file_name=sprintf('hosts_no_control_T=%.2f.eps',Tf);
-    figure_title=sprintf('host density without control');
-    title(figure_title)
-    exportgraphics(gcf,file_name)
-end
-hold off 
-figure
-hold on
-%
-plot(tt,x(:,11:12),'LineWidth',4)
+plot(tt,x(:,8:1),'LineWidth',4)
 legend('u_l', 'u_a','FontSize', 12);
 xlabel('time (days)', 'FontSize', 12);
 ylabel('normalized level', 'FontSize', 12);

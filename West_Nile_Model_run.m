@@ -46,7 +46,11 @@ function [tt,x] = West_Nile_Model_run(larvicide_type)
 % Model Parameters
 % generate parameters
 % Duration of simulation
+<<<<<<< Updated upstream
 Tf=5000;
+=======
+Tf=1500;
+>>>>>>> Stashed changes
 p = System_parametersRL(larvicide_type,Tf);
 
 % Initial conditions for discrete/continuous state variables
