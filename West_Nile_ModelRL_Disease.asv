@@ -1,7 +1,7 @@
 % Updated 07-14-2022
 
-function [dxdt] = West_Nile_ModelRL(t,x,p)
-% This file gives the derivatives of the continuous state variables.
+function [dxdt] = West_Nile_ModelRL_Disease(t,x,p)
+%This file gives the derivatives of the continuous state variables for the disease control problem.
 x1=x(1:19);
 % x2=dx/dx0 is the derivative of the state with respect to its initial value.
 % x2=[dx1/dx1(0), dx1/dx2(0),. . .dx1/dx19(0);
@@ -12,6 +12,8 @@ x1=x(1:19);
 % dx19/dx1(0), dx19/dx2(0), . . .,dx19/dx19(0)];
 x2 = x(length(x1)+1:length(x1)+length(x1)^2);
 x2 = reshape(x2,length(x1),length(x1));
+
+%Model Parameters
 
 % Model Parameters
 
@@ -81,8 +83,6 @@ d_h3 = (Lambda3 - mu_h3)/c_h3; % density-dependent death rate for host group 3
 
 % State variables
 
-% Vector
-
 Es = x(1); % eggs laid by susceptible and exposed mothers
 Ei = x(2); % eggs laid by infected mothers
 Ls = x(3); % susceptible larvae
@@ -104,7 +104,7 @@ Hi3 = x(13); % infected host group 3
 Hr1 = x(14); % recovered host group 1
 Hr2 = x(15); % recovered host group 2
 Hr3 = x(16); % recovered host group 3
-    
+
 % Control 
 
 Ul = x(17); % larvacide
@@ -112,45 +112,40 @@ Ua = x(18); % adultacide
 
 NH = Hs+Hi+Hr; % total hosts
 
-% Vector ODEs - NEEDS UPDATE
+% Vector ODEs
 
 dEs = rs*(Vs+Ve)-m_e*Es;
 dEi = ri*(Vi)-m_e*Ei;
-dLs = m_e*qs*Es+m_e*qi*(1-phi)*Ei-muL*Ls-m_l*Ls-d_l*Ls*(Ls+Li)-km1*Ls*Ul;
-dLi = m_e*qi*phi*Ei-muL*Li-m_l*Li-d_l*Li*(Li+Ls)-km1*Li*Ul;
+dLs = m_e*qs*Es+m_e*qi*(1-phi)*Ei-muL*Ls-m_l*Ls-d*Ls*(Ls+Li)-km1*Ls*Ul;
+dLi = m_e*qi*phi*Ei-muL*Li-m_l*Li-d*Li*(Li+Ls)-km1*Li*Ul;
 dVs = m_l*Ls-b*p_hm*Vs*Hi/NH-muV*Vs-km2*Vs*Ua;
 dVe = b*p_hm*Vs*Hi/NH-kl*Ve-muV*Ve-km2*Ve*Ua;
-dVi = m_l*Li+kl*Ve-muV*Vi-km2*Vi*Ua;
+    dVi = m_l*Li+kl*Ve-muV*Vi-km2*Vi*Ua;
 
-% Host ODEs - NEEDS UPDATE
-
-dHs1 = Lambda*Hs - b*p_mh*Vi*Hs/NH - omega*p_hh*Hi*Hs/NH - d_h*NH*Hs - gamma*Hs; % Updated 07/19/2022
-dHs2 = 
-dHs3 = 
-dHi1 = b*p_mh*Vi*Hs/NH + omega*p_hh*Hi*Hs/NH - (dh+g)*Hi - d_h*NH*Hi - gamma*Hi; % Updated 07/19/2022
-dHi2 = 
-dHi3 = 
-dHr1 = g*Hi - d_h*NH*Hr - gamma*Hr; % Updated 07/19/2022
-dHr2 = 
-dHr3 = 
+    %Host ODEs
+    dHs = Lambda*Hs - b*p_mh*Vi*Hs/NH - omega*p_hh*Hi*Hs/NH - d_h*NH*Hs - gamma*Hs; % Updated 07/19/2022
+%                        [V_i]*[prob of transmission]*[bites per unit time per mosquito]*[number of suceptibles]/[number of hosts]=
+%                           =transmission events per unit time.
+%                       Note the rate at which a host becomes infected increases with bite rate.
+    dHi = b*p_mh*Vi*Hs/NH + omega*p_hh*Hi*Hs/NH - (dh+g)*Hi - d_h*NH*Hi - gamma*Hi; % Updated 07/19/2022
+    dHr = g*Hi - d_h*NH*Hr - gamma*Hr; % Updated 07/19/2022 
     
-%Chemical ODEs
-
-dUl = -gl*Ul;
-dUa = -ga*Ua;
+    %Chemical ODEs
+    dUl=-gl*Ul;
+    dUa=-ga*Ua;
     
-% Integral State ODE
+    %Integral State ODE
+    dx_int=(Vi+Hi);
 
-dx_int = cV*(Vi+Vs+Ve); 
 
-% NEEDS UPDATE
+f=[dEs; dEi; dLs; dLi; dVs; dVe; dVi; dHs; dHi; dHr; dUl; dUa; dx_int];
 
-f=[dEs; dEi; dLs; dLi; dVs; dVe; dVi; dHs; dHi; dHr; dUl; dUa; dx_int]; 
+% Updated to include host demographics:
 
 dfdx=[ -m_e, 0, 0, 0, rs, rs, 0, 0, 0, 0, 0, 0, 0;
         0, -m_e, 0, 0, 0, 0, ri, 0, 0, 0, 0, 0, 0;
-      m_e*qs, m_e*qi*(1-phi), -muL-m_l-km1*Ul-2*d_l*Ls-d_l*Li, -d_l*Ls, 0, 0, 0, 0, 0, 0, -km1*Ls, 0, 0;
- 0, m_e*qi*phi, -d_l*Li, -muL-m_l-km1*Ul-2*d_l*Li-d_l*Ls, 0, 0, 0, 0, 0, 0, -km1*Li, 0, 0;
+      m_e*qs, m_e*qi*(1-phi), -muL-m_l-km1*Ul-2*d*Ls-d*Li, -d*Ls, 0, 0, 0, 0, 0, 0, -km1*Ls, 0, 0;
+ 0, m_e*qi*phi, -d*Li, -muL-m_l-km1*Ul-2*d*Li-d*Ls, 0, 0, 0, 0, 0, 0, -km1*Li, 0, 0;
  0, 0, m_l, 0, -b*p_hm*Hi/NH-muV-km2*Ua, 0, 0, b*p_hm*Vs*Hi/(NH)^2, -b*p_hm*Vs/(NH)+b*p_hm*Vs*Hi/(NH)^2, b*p_hm*Vs*Hi/(NH)^2, 0, -km2*Vs, 0;
  0, 0, 0, 0, b*p_hm*Hi/NH, -kl-muV-km2*Ua, 0, -b*p_hm*Vs*Hi/(NH)^2, b*p_hm*Vs/(NH)-b*p_hm*Hi*Vs/(NH)^2, -b*p_hm*Vs*Hi/(NH)^2, 0, -km2*Ve, 0;
  0, 0, 0, m_l, 0, kl, -muV-km2*Ua, 0, 0, 0, 0, -km2*Vi, 0;
@@ -159,11 +154,12 @@ dfdx=[ -m_e, 0, 0, 0, rs, rs, 0, 0, 0, 0, 0, 0, 0;
  0, 0, 0,  0,  0,  0,  0,  - Hs*d_h - d_h*(NH),  g - Hs*d_h,  - gamma - Hs*d_h,  0,  0,  0; % Hr updated 07/19/2022.
  0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  -gl, 0, 0;
  0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  0,  -ga,  0; 
- 0, 0, 0,  0,  cV,  cV,  cV,  0,  0,  0,  0,  0,  0];
+ 0, 0, 0,  0,  0,  0,  1,  0,  1,  0,  0,  0,  0];
+
 
 dx2dt=dfdx*x2;
 
-dx2dt=reshape(dx2dt,361,1);
+dx2dt=reshape(dx2dt,169,1);
 
 dxdt=[f; dx2dt];
 end
