@@ -1,90 +1,121 @@
-% Updated 07-14-2022
-
-%%%%Write on 6/9/2020, 
-%%%%To compute the basic reproduction number, R0, of a West Nile Virus
-%%%%Model
-%%%%Define variables Hi=infected hosts, Ei=infected eggs,
-%%%%Li=infected larva, Ve=exposed mosquitoes, Vi=infected mosquitoes
+%%%% Write on 6/9/2020, 
+%%%% To compute the basic reproduction number, R0, of a West Nile Virus
+%%%% Model
+%%%% Define variables Hi=infected hosts, Ei=infected eggs,
+%%%% Li=infected larva, Ve=exposed mosquitoes, Vi=infected mosquitoes
 %%%%%
 clear
-syms Hi Ei Li Ve Vi
-syms rs ri phi qs qi m_e m_l muL muV b c_l kl p_hm p_mh dh g gl ga km1 km2 cV d_l NH gamma omega p_hh % Included gamma, omega, p_hh
-%%%Compute Jacobian
-%%%%%F=new infections, V=transfer between compartments
-%%%%Only need to focus on infection compartments: [Hi Ei Li Ve Vi]
+syms Hi1 Hi2 Hi3 Ei Li Ve Vi
+syms rs ri phi qs qi m_e m_l muL muV b c_l kl p_mh gl ga km1 km2 cV d_l
+syms p_hm1 p_hm2 p_hm3 omega1 omega2 omega3 p_hh1 p_hh2 p_hh3 g1 g2 g3 
+syms gamma1 gamma2 gamma3 mu_h1 mu_h2 mu_h3 c_h1 c_h2 c_h3 d_h1 d_h2 d_h3 NH1 NH2 NH3
+%%% Compute Jacobian
+%%%%% F=new infections, V=transfer between compartments
+%%%% Only need to focus on infection compartments: [Hi Ei Li Ve Vi]
+
+% UPDATE F AND V VECTORS!!!
 Ffun=[p_mh*b*Vi + omega*p_hh*Hi, ri*Vi, 0, b*p_mh*m_l*Hi*c_l/(NH*muV), 0]; % Updated to inlcude new interaction term % + omega*p_hh*Hi % 
 Vfun=[-dh*Hi-g*Hi - gamma*Hi, -m_e*Ei, m_e*qi*phi*Ei-muL*Li-m_l*Li-d_l*Li, -kl*Ve-muV*Ve, m_l*Li+kl*Ve-muV*Vi]; % Updated to include gamma %-gamma*Hi% 
-%%%%Compute the jacobian with respect to infection compartments: [Hi Ei Li Ve Vi]
+%%%% Compute the jacobian with respect to infection compartments: [Hi Ei Li Ve Vi]
 FF=jacobian(Ffun, [Hi Ei Li Ve Vi]);
 VV=jacobian(Vfun, [Hi Ei Li Ve Vi]);
 FF
 VV
-%%%Find matrix F and V
-%%%%Evaluate FF and VV at disease free equilibrium
-%%%%Only need to set infection compartments [I, As, Is, F, X, Ms, V] as zeros
-MatrixF=subs(FF, [Hi Ei Li Ve Vi], [0, 0, 0, 0, 0])
-MatrixV=subs(VV, [Hi Ei Li Ve Vi], [0, 0, 0, 0, 0])
-%%%%%Compute F*V^{-1}
+%%% Find matrix F and V
+%%%% Evaluate FF and VV at disease free equilibrium
+%%%% Only need to set infection compartments [I, As, Is, F, X, Ms, V] as zeros
+MatrixF=subs(FF, [Hi1 Hi2 Hi3 Ei Li Ve Vi], [0, 0, 0, 0, 0, 0, 0])
+MatrixV=subs(VV, [Hi1 Hi2 Hi3 Ei Li Ve Vi], [0, 0, 0, 0, 0, 0, 0])
+%%%%% Compute F*V^{-1}
 RR=-MatrixF*inv(MatrixV)
-%%%Find eigenvalue of RR, largest eigenvalue=R0
+%%% Find eigenvalue of RR, largest eigenvalue=R0
 syms lambda
-pp=det(RR-lambda*eye(5));
+pp=det(RR-lambda*eye(7)); % Change this from 7 to 5 if something isn't working correctly.
 pp_factors=factor(pp);
 num_factors=length(pp_factors);
 eigen_values=[];
 for i=1:num_factors
-eigen_values=[eigen_values; solve(pp_factors(i)==0, lambda,'MaxDegree', 5)];
+eigen_values=[eigen_values; solve(pp_factors(i)==0, lambda,'MaxDegree', 7)]; % Change this from 7 to 5 if something isn't working correctly.
 end
-%%%%%eigenvalues are given, the largest one is R0
-%%%%%Comment out the following if you just need a symbolic expression of R0
-%%%%%Numerical example, Largest eigenvalue is spectral radius (R0)
+%%%%% eigenvalues are given, the largest one is R0
+%%%%% Comment out the following if you just need a symbolic expression of R0
+%%%%% Numerical example, Largest eigenvalue is spectral radius (R0)
 
-%%%set values for parameters. note the argument is for plotting decay in
-%%%larvicidal effect and does not impact this computation.
-p = System_parametersRL(1,90);
-Nh=p(22);
-%Vector parameters
-rs = p(1);            %intrinsic rate of increase of uninfected mosquitoes
-ri = p(2);           %intrinsic rate of increase of infected mosquitoes
-phi=p(3);               %fraction of eggs born to infected mothers that are infected
-qs=p(4);                %fraction of eggs from uninfected mosquitoes that hatch
-qi=p(5);                %fraction of eggs laid to infected mosquitoes that hatch
-m_e = p(6);              %egg maturatation rate
-m_l = p(7);             %larval maturation rate
-muL = p(8);           %larval death rate
-muV=p(9);             %adult death rate
-b = p(10);             %mosquito biting rate
-c_l = p(11);             %mosquito carrying capacity
-%Disease parameters
-kl = p(12);           %disease progression (1/latency period)
-p_hm = p(13);     %host-to-mosquito transmission
-p_mh = p(14);     %mosquito-to-host transmission
-dh = p(15);           %induced host mortality
-g = p(16);            %host recovery rate
-gl=p(17);
-ga=p(18);
-km1=p(19);
-km2=p(20);
-cV=p(21);                   %weight of cost of vectors in objective functional
+%%% set values for parameters. Note the argument is for plotting decay in
+%%% larvicidal effect and does not impact this computation.
+p = System_parametersRL(1,90); % Not quite sure why this goes to 90. 
 
-NH=p(22);
+% Model Parameters
 
-gamma = p(31) % Host natural death rate
-omega = p(32) %Host-to-Host Contact Rate
-p_hh =    p(33) %Host-to-Host Transmission Probability
+rs = p(1); % egg laying rate of S and E mosquitoes
+ri = p(2); % egg laying rate of I mosquitoes
 
-p(34) = c_h % Host carrying capacity
+phi = p(3); % fraction of eggs born to infected mothers that are infected (fraction of eggs infected)
+qs = p(4); % fraction of eggs from uninfected mosquitoes that hatch
+qi = p(5); % fraction of eggs laid to infected mosquitoes that hatch
+
+m_e = p(6); % hatch rate 
+m_l = p(7); % larval maturation rate
+
+muL = p(8); % larval death rate
+muV = p(9); % adult death rate
+
+b = p(10); % mosquito biting rate
+c_l = p(11); % mosquito carrying capacity (larval)
+
+kl = p(12); % disease progression in mosquitoes (1/latency period)
+p_mh = p(13); % mosquito-to-host transmission
+   
+p_hm1 = p(14); % host-to-mosquito transmission host group 1
+p_hm2 = p(15); % host-to-mosquito transmission host group 2
+p_hm3 = p(16); % host-to-mosquito transmission host group 3
+
+omega1 = p(17); % direct transmission rate host group 1
+omega2 = p(18); % direct transmission rate host group 2
+omega3 = p(19); % direct transmission rate host group 3
+
+p_hh1 = p(20); % contact rate host group 1
+p_hh2 = p(21); % contact rate host group 2
+p_hh3 = p(22); % contact rate host group 3 
+
+g1 = p(23); % WNV recovery host group 1
+g2 = p(24); % WNV recovery host group 2
+g3 = p(25); % WNV recovery host group 3
+
+gamma1 = p(26); % WNV death host group 1
+gamma2 = p(27); % WNV death host group 2
+gamma3 = p(28); % WNV death host group 3
+
+mu_h1 = p(32); % natural death rate host group 1
+mu_h2 = p(33); % natural death rate host group 2
+mu_h3 = p(34); % natural death rate host group 3
+
+c_h1 = p(35); % carrying capacity host group 1
+c_h2 = p(36); % carrying capacity host group 2
+c_h3 = p(37); % carrying capacity host group 3
+
+km1 = p(38); % max rate at which larvicide kills larvae
+km2 = p(40); % max rate at which adulticide kills adult vectors
+
+gl = p(39); % larvicide decay rate
+ga = p(41); % adulticide decay rate
+
+cV = p(42); % weight of cost of vectors in objective functional
 
 d_l=((rs*m_l*qs/muV)-muL-m_l)/c_l; % density-dependent death rate for larvae
-d_h = (Lambda - gamma)/c_h % density-dependent death rate for host
+d_h1 = (Lambda1 - mu_h1)/c_h1; % density-dependent death rate for host group 1
+d_h2 = (Lambda2 - mu_h2)/c_h2; % density-dependent death rate for host group 2
+d_h3 = (Lambda3 - mu_h3)/c_h3; % density-dependent death rate for host group 3
 
-%%%%eivenvalues are copied from  eig=solve(p, lambda)
+%%%% eivenvalues are copied from  eig=solve(p, lambda)
 sol1=double(subs(eigen_values(1)));
 sol2=double(subs(eigen_values(2)));
 sol3=double(subs(eigen_values(3)));
 sol4=double(subs(eigen_values(4)));
 sol5=double(subs(eigen_values(5)));
-sol=[sol1 sol2 sol3 sol4 sol5];
- %%%%largest eigenvalue is R0
+sol6=double(subs(eigen_values(6)));
+sol7=double(subs(eigen_values(7)));
+sol=[sol1 sol2 sol3 sol4 sol5 sol6 sol7];
+%%%% largest eigenvalue is R0
 [subR0,max_index]=max(sol)
 R0=eigen_values(max_index)
