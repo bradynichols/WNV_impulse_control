@@ -157,8 +157,9 @@ dfdx=[ -m_e, 0, 0, 0, rs, rs, 0, 0, 0, 0, 0, 0, 0;
  0, 0, 0, 0, b*p_hm*Hi/NH, -kl-muV-km2*Ua, 0, -b*p_hm*Vs*Hi/(NH)^2, b*p_hm*Vs/(NH)-b*p_hm*Hi*Vs/(NH)^2, -b*p_hm*Vs*Hi/(NH)^2, 0, -km2*Ve, 0;
  0, 0, 0, m_l, 0, kl, -muV-km2*Ua, 0, 0, 0, 0, -km2*Vi, 0;
  0, 0, 0, 0, 0, 0, -(Hs1*b*p_mh)/(NH1), Lambda1-mu_h1-Hs1*d_h1-d_h1*(NH1)-(Hi1*omega1*p_hh1)/(NH1)-(Vi*b*p_mh)/(NH1)+(Hi1*Hs1*omega1*p_hh1)/(NH1)^2+(Hs1*Vi*b*p_mh)/(NH1)^2, 0, 0, (Hi1*Hs1*omega1*p_hh1)/(NH1)^2 - (Hs1*omega1*p_hh1)/(NH1) - Hs1*d_h1 + (Hs1*Vi*b*p_mh)/(NH1)^2, 0, 0, (Hi1*Hs1*omega1*p_hh1)/(NH1)^2 - Hs1*d_h1 + (Hs1*Vi*b*p_mh)/(NH1)^2, 0, 0, 0, 0, 0; % Hs1 
- 0, 0, 0, 0, 0, 0, -(Hs2*b*p_mh)/(NH2), Lambda2-mu_h2-Hs2*d_h2-d_h2*(NH2)-(Hi2*omega2*p_hh2)/(NH2)-(Vi*b*p_mh)/(NH2)+(Hi2*Hs2*omega2*p_hh2)/(NH2)^2+(Hs2*Vi*b*p_mh)/(NH2)^2, 0, 0, (Hi2*Hs2*omega2*p_hh2)/(NH2)^2 - (Hs2*omega2*p_hh2)/(NH2) - Hs2*d_h1 + (Hs2*Vi*b*p_mh)/(NH2)^2, 0, 0, (Hi2*Hs2*omega2*p_hh2)/(NH2)^2 - Hs2*d_h2 + (Hs2*Vi*b*p_mh)/(NH2)^2, 0, 0, 0, 0, 0; % Hs2 
- 0, 0, 0, 0, 0, 0, -(Hs3*b*p_mh)/(NH3), Lambda3-mu_h3-Hs3*d_h3-d_h3*(NH3)-(Hi3*omega3*p_hh3)/(NH3)-(Vi*b*p_mh)/(NH3)+(Hi3*Hs3*omega3*p_hh3)/(NH3)^2+(Hs3*Vi*b*p_mh)/(NH3)^2, 0, 0, (Hi3*Hs3*omega3*p_hh3)/(NH3)^2 - (Hs3*omega3*p_hh3)/(NH3) - Hs3*d_h3 + (Hs3*Vi*b*p_mh)/(NH3)^2, 0, 0, (Hi3*Hs3*omega3*p_hh3)/(NH3)^2 - Hs3*d_h1 + (Hs3*Vi*b*p_mh)/(NH3)^2, 0, 0, 0, 0, 0; % Hs3 
+ 0, 0, 0, 0, 0, 0, -(Hs2*b*p_mh)/(NH2), Lambda2-mu_h2-Hs2*d_h2-d_h2*(NH2)-(Hi2*omega2*p_hh2)/(NH2)-(Vi*b*p_mh)/(NH2)+(Hi2*Hs2*omega2*p_hh2)/(NH2)^2+(Hs2*Vi*b*p_mh)/(NH2)^2, 0, 0, (Hi2*Hs2*omega2*p_hh2)/(NH2)^2 - (Hs2*omega2*p_hh2)/(NH2) - Hs2*d_h1 + (Hs2*Vi*b*p_mh)/(NH2)^2, 0, 0, (Hi2*Hs1*omega1*p_hh1)/(NH1)^2 - Hs1*d_h1 + (Hs1*Vi*b*p_mh)/(NH1)^2, 0, 0, 0, 0, 0; % Hs1 
+; % Hs2
+ ; % Hs3
  0, 0, 0, 0, 0, 0, b*p_mh*Hs/NH, (Hi*omega*p_hh)/(NH) - d_h*(NH) - Hs*d_h + (Vi*b*p_mh)/(NH) - (Hi*Hs*omega*p_hh)/(NH)^2 - (Hs*Vi*b*p_mh)/(NH)^2, (Hs*omega*p_hh)/(NH) - g - gamma - Hs*d_h - dh - (Hi*Hs*omega*p_hh)/(NH)^2 - (Hs*Vi*b*p_mh)/(NH)^2, - Hs*d_h - (Hi*Hs*omega*p_hh)/(NH)^2 - (Hs*Vi*b*p_mh)/(NH)^2, 0, 0, 0; % 
  0, 0, 0,  0,  0,  0,  0,  - Hs*d_h - d_h*(NH),  g - Hs*d_h,  - gamma - Hs*d_h,  0,  0,  0; % Hr updated 07/19/2022.
  0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  -gl, 0, 0;
