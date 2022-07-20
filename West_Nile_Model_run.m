@@ -46,7 +46,7 @@ function [tt,x] = West_Nile_Model_run(larvicide_type)
 % Model Parameters
 % generate parameters
 % Duration of simulation
-Tf=200;
+Tf=5000;
 p = System_parametersRL(larvicide_type,Tf);
 
 % Initial conditions for discrete/continuous state variables
@@ -87,7 +87,7 @@ X0=[X01; X02];
 f=@(t,x)West_Nile_ModelRL(t,x,p);
 
 %solve the state equations
-[tt,x]=ode23(f,[0,Tf],X0);
+[tt,x]=ode45(f,[0,Tf],X0);
 
 West_Nile_Model_plots(tt,x,0,[],[],Tf,[],[],larvicide_type);
 end
