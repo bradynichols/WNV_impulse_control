@@ -12,7 +12,6 @@ p(2) = 100/8; % egg laying rate of I mosquitoes
               % we might estimate the rate of egg-laying of unifected females as 150/8 and that of infected mosquitoes as 100/8.
               % Cite West Nile Virus Infection Decreases Fecundity of Culex tarsalis Females
 
-
 p(3) = 0.003; % fraction of eggs infected about 3/1000
               % Cite importance of Vertical and Horizontal Transmission of West Nile Virus by Culex pipiens in the Northeastern United States.
 
