@@ -14,11 +14,11 @@ syms gamma1 gamma2 gamma3 mu_h1 mu_h2 mu_h3 c_h1 c_h2 c_h3 d_h1 d_h2 d_h3 NH1 NH
 %%%% Only need to focus on infection compartments: [Hi1 Hi2 Hi3 Ei Li Ve Vi]
 
 % UPDATE F AND V VECTORS!!!
-Ffun=[p_mh*b*Vi + omega*p_hh*Hi, ri*Vi, 0, b*p_mh*m_l*Hi*c_l/(NH*muV), 0]; % Updated to inlcude new interaction term % + omega*p_hh*Hi % 
-Vfun=[-dh*Hi-g*Hi - gamma*Hi, -m_e*Ei, m_e*qi*phi*Ei-muL*Li-m_l*Li-d_l*Li, -kl*Ve-muV*Ve, m_l*Li+kl*Ve-muV*Vi]; % Updated to include gamma %-gamma*Hi% 
+Ffun=[p_mh*b*Vi + omega1*p_hh1*Hi1, p_mh*b*Vi + omega2*p_hh2*Hi2,p_mh*b*Vi + omega3*p_hh3*Hi3, ri*Vi, 0, b*p_mh*m_l*Hi1*c_l/(NH1*muV) + b*p_mh*m_l*Hi2*c_l/(NH2*muV) + b*p_mh*m_l*Hi3*c_l/(NH3*muV), 0]; % Updated to inlcude new interaction term % + omega*p_hh*Hi % 
+Vfun=[- gamma1*Hi1 - g1*Hi1 - d_h1*c_h1*Hi1 - mu_h1*Hi1, - gamma2*Hi2 - g2*Hi2 - d_h2*c_h2*Hi2 - mu_h2*Hi2, - gamma3*Hi3 - g3*Hi3 - d_h3*c_h3*Hi3 - mu_h3*Hi3,-m_e*Ei, m_e*qi*phi*Ei-muL*Li-m_l*Li-d_l*Li, -kl*Ve-muV*Ve, m_l*Li+kl*Ve-muV*Vi]; % Updated to include gamma %-gamma*Hi% 
 %%%% Compute the jacobian with respect to infection compartments: [Hi Ei Li Ve Vi]
-FF=jacobian(Ffun, [Hi Ei Li Ve Vi]);
-VV=jacobian(Vfun, [Hi Ei Li Ve Vi]);
+FF=jacobian(Ffun, [Hi1 Hi2 Hi3 Ei Li Ve Vi]);
+VV=jacobian(Vfun, [Hi1 Hi2 Hi3 Ei Li Ve Vi]);
 FF
 VV
 %%% Find matrix F and V
