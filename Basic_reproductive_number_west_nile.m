@@ -11,7 +11,7 @@ syms p_hm1 p_hm2 p_hm3 omega1 omega2 omega3 p_hh1 p_hh2 p_hh3 g1 g2 g3
 syms gamma1 gamma2 gamma3 mu_h1 mu_h2 mu_h3 c_h1 c_h2 c_h3 d_h1 d_h2 d_h3 NH1 NH2 NH3
 %%% Compute Jacobian
 %%%%% F=new infections, V=transfer between compartments
-%%%% Only need to focus on infection compartments: [Hi Ei Li Ve Vi]
+%%%% Only need to focus on infection compartments: [Hi1 Hi2 Hi3 Ei Li Ve Vi]
 
 % UPDATE F AND V VECTORS!!!
 Ffun=[p_mh*b*Vi + omega*p_hh*Hi, ri*Vi, 0, b*p_mh*m_l*Hi*c_l/(NH*muV), 0]; % Updated to inlcude new interaction term % + omega*p_hh*Hi % 
