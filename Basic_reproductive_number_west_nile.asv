@@ -1,3 +1,5 @@
+% Updated 07-14-2022
+
 %%%% Write on 6/9/2020, 
 %%%% To compute the basic reproduction number, R0, of a West Nile Virus
 %%%% Model
@@ -70,14 +72,6 @@ p_hm1 = p(14); % host-to-mosquito transmission host group 1
 p_hm2 = p(15); % host-to-mosquito transmission host group 2
 p_hm3 = p(16); % host-to-mosquito transmission host group 3
 
-omega1 = p(17); % direct transmission rate host group 1
-omega2 = p(18); % direct transmission rate host group 2
-omega3 = p(19); % direct transmission rate host group 3
-
-p_hh1 = p(20); % contact rate host group 1
-p_hh2 = p(21); % contact rate host group 2
-p_hh3 = p(22); % contact rate host group 3 
-
 g1 = p(23); % WNV recovery host group 1
 g2 = p(24); % WNV recovery host group 2
 g3 = p(25); % WNV recovery host group 3
@@ -88,24 +82,24 @@ gamma3 = p(28); % WNV death host group 3
 
 mu_h1 = p(32); % natural death rate host group 1
 mu_h2 = p(33); % natural death rate host group 2
-mu_h3 = p(34); % natural death rate host group 3
+mu_h3 = p(34); % natural death rate host group 
 
-c_h1 = p(35); % carrying capacity host group 1
-c_h2 = p(36); % carrying capacity host group 2
-c_h3 = p(37); % carrying capacity host group 3
 
-km1 = p(38); % max rate at which larvicide kills larvae
-km2 = p(40); % max rate at which adulticide kills adult vectors
+gl=p(17);
+ga=p(18);
+km1=p(19);
+km2=p(20);
+cV=p(21);                   %weight of cost of vectors in objective functional
 
-gl = p(39); % larvicide decay rate
-ga = p(41); % adulticide decay rate
+NH=p(22);
 
-cV = p(42); % weight of cost of vectors in objective functional
+omega = p(32) % Host-to-Host Contact Rate
+p_hh =    p(33) %Host-to-Host Transmission Probability
+
+p(34) = c_h % Host carrying capacity
 
 d_l=((rs*m_l*qs/muV)-muL-m_l)/c_l; % density-dependent death rate for larvae
-d_h1 = (Lambda1 - mu_h1)/c_h1; % density-dependent death rate for host group 1
-d_h2 = (Lambda2 - mu_h2)/c_h2; % density-dependent death rate for host group 2
-d_h3 = (Lambda3 - mu_h3)/c_h3; % density-dependent death rate for host group 3
+d_h = (Lambda - gamma)/c_h % density-dependent death rate for host
 
 %%%% eivenvalues are copied from  eig=solve(p, lambda)
 sol1=double(subs(eigen_values(1)));
@@ -116,6 +110,6 @@ sol5=double(subs(eigen_values(5)));
 sol6=double(subs(eigen_values(6)));
 sol7=double(subs(eigen_values(7)));
 sol=[sol1 sol2 sol3 sol4 sol5 sol6 sol7];
-%%%% largest eigenvalue is R0
+ %%%% largest eigenvalue is R0
 [subR0,max_index]=max(sol)
 R0=eigen_values(max_index)
