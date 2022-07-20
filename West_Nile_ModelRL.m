@@ -147,7 +147,7 @@ dx_int = cV*(Vi+Vs+Ve);
 
 % NEEDS UPDATE
 
-f=[dEs; dEi; dLs; dLi; dVs; dVe; dVi; dHs; dHi; dHr; dUl; dUa; dx_int]; 
+f=[dEs; dEi; dLs; dLi; dVs; dVe; dVi; dHs1; dHs2; dHs3 dHi1; dHi2; dHi3 dHr1; dHr2; dHr3; dUl; dUa; dx_int]; 
 
 dfdx=[ -m_e, 0, 0, 0, rs, rs, 0, 0, 0, 0, 0, 0, 0;
         0, -m_e, 0, 0, 0, 0, ri, 0, 0, 0, 0, 0, 0;
