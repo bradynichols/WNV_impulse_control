@@ -16,7 +16,7 @@ syms gamma1 gamma2 gamma3 mu_h1 mu_h2 mu_h3 c_h1 c_h2 c_h3 d_h1 d_h2 d_h3 Lambda
 
 % UPDATE F AND V VECTORS - Should be correct
 
-% INSERT DFE!!!
+% INSERT DFE!!! (to be updated)
 
 Ffun=[p_mh*b*Vi + p_hh1*omega1*Hi1, % Hi1
     p_mh*b*Vi + p_hh2*omega2*Hi2, % Hi2
@@ -134,10 +134,10 @@ ga = p(41); % adulticide decay rate
 
 cV = p(42); % weight of cost of vectors in objective functional
 
-d_l=((rs*m_l*qs/muV)-muL-m_l)/c_l; % density-dependent death rate for larvae
-d_h1 = (Lambda1 - mu_h1)/c_h1; % density-dependent death rate for host group 1
-d_h2 = (Lambda2 - mu_h2)/c_h2; % density-dependent death rate for host group 2
-d_h3 = (Lambda3 - mu_h3)/c_h3; % density-dependent death rate for host group 3
+d_l=((rs*m_l*qs/muV)-muL-m_l); % density-dependent death rate for larvae
+d_h1 = (Lambda1 - mu_h1); % density-dependent death rate for host group 1
+d_h2 = (Lambda2 - mu_h2); % density-dependent death rate for host group 2
+d_h3 = (Lambda3 - mu_h3); % density-dependent death rate for host group 3
 
 %% eivenvalues are copied from  eig=solve(p, lambda)
 sol1=double(subs(eigen_values(1)));
