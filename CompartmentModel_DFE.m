@@ -10,28 +10,12 @@ NH1 = Hs1 + Hi1 + Hr1
 NH2 = Hs2 + Hi2 + Hr2
 NH3 = Hs3 + Hi3 + Hr3
 
-% dHs1 = Lambda1*Hs1 - d_h1 - mu_h1*Hs1 == 0
-% solve(dHs1, Hs1)
-
-% Hs1 = d_h1/(Lambda1 - mu_h1)
-
-% dHs2 = Lambda2*Hs2 - d_h2 - mu_h2*Hs2 == 0
-% solve(dHs2, Hs2)
-%Hs2 = d_h2/(Lambda2 - mu_h2)
-
-% dHs3 = Lambda3*Hs3 - d_h3 - mu_h3*Hs3 == 0
-% solve(dHs3, Hs3)
-%Hs3 = d_h3/(Lambda3 - mu_h3)
-
-% Vectors
-
-% dEs = rs*(Vs)-m_e*Es;
-% solve(dEs, Es)
-% Es = (Vs*rs)/m_e
-
-dLs = m_e*qs*Es - muL*Ls - m_l*Ls - d_l*Ls
-solve(dLs, Ls)
-
-% dVs = m_l*Ls - b*p_hm1*Vs*Hi1/NH1 - b*p_hm2*Vs*Hi2/NH2 - b*p_hm3*Vs*Hi3/NH3 - muV*Vs - km2*Vs*Ua;
-
+dHs1 = Lambda1*Hs1 - d_h1*Hs1 - mu_h1*Hs1 == 0
+solve(dHs1, Hs1)
+% Hs1 = c_h1
+% Hs2 = c_h2
+% Hs3 = c_h3
+% Ls = c_l
+% Vs = c_l*m_l/muV
+% Es = c_l*m_l*rs/(muV*m_e)
 
