@@ -1,11 +1,19 @@
-x = [0:1:100]
+x = [0:1:365]
 c = 1
-y = c*x^2;
+y = c*x;
 for n = 1:1:365
-    if 0.5 > n > 0.7
-        c = 3;
-    else 
-        c = 0.2;
+    if (0 < n < 50)
+        c = 3
+        plot(x,y)
+        hold on;
+    elseif (51 < n < 200)
+        c = 0.2
+        plot(x,y)
+        hold on;
+    else
+        c = 10;
+        plot(x,y)
+        hold on;
     end
 end
     
