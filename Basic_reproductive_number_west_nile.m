@@ -5,7 +5,8 @@
 %%%% Li=infected larva, Ve=exposed mosquitoes, Vi=infected mosquitoes
 %%%%%
 clear
-syms Hi1 Hi2 Hi3 Ei Li Ve Vi 
+syms Hi1 Hi2 Hi3 Ei Li Ve Vi
+% Add Vs above!!!
 syms rs ri phi qs qi m_e m_l muL muV b c_l kl p_mh gl ga km1 km2 cV d_l
 syms p_hm1 p_hm2 p_hm3 omega1 omega2 omega3 p_hh1 p_hh2 p_hh3 g1 g2 g3 
 syms gamma1 gamma2 gamma3 mu_h1 mu_h2 mu_h3 c_h1 c_h2 c_h3 d_h1 d_h2 d_h3 Lambda1 Lambda2 Lambda3
@@ -18,25 +19,13 @@ syms gamma1 gamma2 gamma3 mu_h1 mu_h2 mu_h3 c_h1 c_h2 c_h3 d_h1 d_h2 d_h3 Lambda
 
 % INSERT DFE!!!
 
-Ffun=[p_mh*b*Vi + p_hh1*omega1*Hi1, % Hi1
-    p_mh*b*Vi + p_hh2*omega2*Hi2, % Hi2
-    p_mh*b*Vi + p_hh3*omega3*Hi3, % Hi3
-    r1*Vi, % Ei
-    0, % Li
-    b*p_hm1*Vs*Hi1/c_h1 + b*p_hm2*Vs*Hi2/c_h2 + b*p_hm3*Vs*Hi3/c_h3, % Ve
-    0]; % Vi
+% Ffun=[p_mh*b*Vi+p_hh1*omega1*Hi1, p_mh*b*Vi+p_hh2*omega2*Hi2, p_mh*b*Vi+p_hh3*omega3*Hi3, ri*Vi, 0, b*p_hm1*Vs*Hi1/c_h1+b*p_hm2*Vs*Hi2/c_h2+b*p_hm3*Vs*Hi3/c_h3, 0];
 
-Vfun=[-gamma1*Hi1 - g1*Hi1 - d_h1*Hi1*c_h1 - mu_h1*Hi1, % Hi1
-    -gamma2*Hi2 - g2*Hi2 - d_h2*Hi2*c_h2 - mu_h2*Hi2, % Hi2
-    -gamma3*Hi3 - g3*Hi3 - d_h3*Hi3*c_h3 - mu_h3*Hi3, % Hi3
-    -m_e*Ei, % Ei
-    m_e*qi*phi*Ei - muL*Li - m_l*Li - d_l*Li, % Li
-    -kl*Ve - muV*Ve, % Ve
-    m_l*Li +kl*Ve]; % Vi 
+Ffun=[p_mh*b*Vi+p_hh1*omega1*Hi1, p_mh*b*Vi+p_hh2*omega2*Hi2, p_mh*b*Vi+p_hh3*omega3*Hi3, ri*Vi, 0, b*p_hm1*Hi1/c_h1+b*p_hm2*Hi2/c_h2+b*p_hm3*Hi3/c_h3, 0];
+
+Vfun=[-gamma1*Hi1-g1*Hi1-d_h1*Hi1*c_h1-mu_h1*Hi1, -gamma2*Hi2-g2*Hi2-d_h2*Hi2*c_h2-mu_h2*Hi2, -gamma3*Hi3-g3*Hi3-d_h3*Hi3*c_h3-mu_h3*Hi3, -m_e*Ei, m_e*qi*phi*Ei-muL*Li-m_l*Li-d_l*Li, -kl*Ve-muV*Ve, m_l*Li+kl*Ve];
 
 %%%% Compute the jacobian with respect to infection compartments: [Hi Ei Li Ve Vi]
-% FF=jacobian(Ffun, [Hi1 Hi2 Hi3 Ei Li Ve Vi]);
-% VV=jacobian(Vfun, [Hi1 Hi2 Hi3 Ei Li Ve Vi]);
 
 FF=jacobian(Ffun, [Hi1 Hi2 Hi3 Ei Li Ve Vi]);
 VV=jacobian(Vfun, [Hi1 Hi2 Hi3 Ei Li Ve Vi]);
@@ -47,23 +36,20 @@ VV
 %%%% Evaluate FF and VV at disease free equilibrium
 %%%% Only need to set infection compartments [I, As, Is, F, X, Ms, V] as zeros
 
-% MatrixF=subs(FF, [Hi1 Hi2 Hi3 Ei Li Ve Vi], [0, 0, 0, 0, 0, 0, 0])
-% MatrixV=subs(VV, [Hi1 Hi2 Hi3 Ei Li Ve Vi], [0, 0, 0, 0, 0, 0, 0])
-
-MatrixF=subs(FF, [Hi1 Ei Li Ve Vi], [0, 0, 0, 0, 0])
-MatrixV=subs(VV, [Hi1 Ei Li Ve Vi], [0, 0, 0, 0, 0])
+MatrixF=subs(FF, [Hi1 Hi2 Hi3 Ei Li Ve Vi], [0, 0, 0, 0, 0, 0, 0])
+MatrixV=subs(VV, [Hi1 Hi2 Hi3 Ei Li Ve Vi], [0, 0, 0, 0, 0, 0, 0])
 
 %%%%% Compute F*V^{-1}
 RR=-MatrixF*inv(MatrixV)
 
 %%% Find eigenvalue of RR, largest eigenvalue=R0
 syms lambda
-pp=det(RR-lambda*eye(5)); % Change this from 7 to 5 if something isn't working correctly.
+pp=det(RR-lambda*eye(7));
 pp_factors=factor(pp);
 num_factors=length(pp_factors);
 eigen_values=[];
 for i=1:num_factors
-eigen_values=[eigen_values; solve(pp_factors(i)==0, lambda,'MaxDegree', 5)]; % Change this from 7 to 5 if something isn't working correctly.
+eigen_values=[eigen_values; solve(pp_factors(i)==0, lambda,'MaxDegree', 7)];
 end
 %%%%% eigenvalues are given, the largest one is R0
 %%%%% Comment out the following if you just need a symbolic expression of R0
@@ -139,7 +125,7 @@ d_h1 = (Lambda1 - mu_h1)/c_h1; % density-dependent death rate for host group 1
 d_h2 = (Lambda2 - mu_h2)/c_h2; % density-dependent death rate for host group 2
 d_h3 = (Lambda3 - mu_h3)/c_h3; % density-dependent death rate for host group 3
 
-%% eivenvalues are copied from  eig=solve(p, lambda)
+%eivenvalues are copied from  eig=solve(p, lambda)
 sol1=double(subs(eigen_values(1)));
 sol2=double(subs(eigen_values(2)));
 sol3=double(subs(eigen_values(3)));
@@ -156,9 +142,8 @@ sol7=double(subs(eigen_values(7)));
 % sol6=(subs(eigen_values(6))); 
 % sol7=(subs(eigen_values(7)));
 
-% sol=[sol1 sol2 sol3 sol4 sol5 sol6 sol7]
 
-sol=[sol1 sol2 sol3 sol4 sol5]
+sol=[sol1 sol2 sol3 sol4 sol5 sol6 sol7]
 
 % %%%% largest eigenvalue is R0
 [subR0,max_index]=max(sol)
