@@ -24,20 +24,11 @@ Vs = c_l*m_l/muV
 %%%%% F=new infections, V=transfer between compartments 
 %%%% Only need to focus on infection compartments: [Hi1 Hi2 Hi3 Ei Li Ve Vi]
 
-<<<<<<< HEAD
-% UPDATE F AND V VECTORS - Should be correct
-
-% INSERT DFE!!! (to be updated)
-
 % Ffun=[p_mh*b*Vi+p_hh1*omega1*Hi1, p_mh*b*Vi+p_hh2*omega2*Hi2, p_mh*b*Vi+p_hh3*omega3*Hi3, ri*Vi, 0, b*p_hm1*Vs*Hi1/c_h1+b*p_hm2*Vs*Hi2/c_h2+b*p_hm3*Vs*Hi3/c_h3, 0];
 
 Ffun=[p_mh*b*Vi+p_hh1*omega1*Hi1, p_mh*b*Vi+p_hh2*omega2*Hi2, p_mh*b*Vi+p_hh3*omega3*Hi3, ri*Vi, 0, b*p_hm1*Hi1/c_h1+b*p_hm2*Hi2/c_h2+b*p_hm3*Hi3/c_h3, 0];
 
-Vfun=[-gamma1*Hi1-g1*Hi1-d_h1*Hi1-mu_h1*Hi1, -gamma2*Hi2-g2*Hi2-d_h2*Hi2-mu_h2*Hi2, -gamma3*Hi3-g3*Hi3-d_h3*Hi3-mu_h3*Hi3, -m_e*Ei, m_e*qi*phi*Ei-muL*Li-m_l*Li-d_l*Li, -kl*Ve-muV*Ve, m_l*Li+kl*Ve];
-=======
-Ffun=[p_mh*b*Vi+p_hh1*omega1*Hi1, p_mh*b*Vi+p_hh2*omega2*Hi2, p_mh*b*Vi+p_hh3*omega3*Hi3, ri*Vi, 0, b*p_hm1*Vs*Hi1/c_h1+b*p_hm2*Vs*Hi2/c_h2+b*p_hm3*Vs*Hi3/c_h3, 0];
-Vfun=[-gamma1*Hi1-g1*Hi1-d_h1*Hi1*c_h1-mu_h1*Hi1, -gamma2*Hi2-g2*Hi2-d_h2*Hi2*c_h2-mu_h2*Hi2, -gamma3*Hi3-g3*Hi3-d_h3*Hi3*c_h3-mu_h3*Hi3, -m_e*Ei, m_e*qi*phi*Ei-muL*Li-m_l*Li-d_l*Li, -kl*Ve-muV*Ve, m_l*Li+kl*Ve];
->>>>>>> 672ff6d77b18187e36c1da07fba59b8afd4cad15
+Vfun=[-gamma1*Hi1-g1*Hi1-d_h1*Hi1-mu_h1*Hi1, -gamma2*Hi2-g2*Hi2-d_h2*Hi2-mu_h2*Hi2, -gamma3*Hi3-g3*Hi3-d_h3*Hi3-mu_h3*Hi3, -m_e*Ei, m_e*qi*phi*Ei-muL*Li-m_l*Li-d_l*Li, -kl*Ve-muV*Ve, m_l*Li+kl*Ve-muV*Vi];
 
 %%%% Compute the jacobian with respect to infection compartments: [Hi Ei Li Ve Vi]
 
@@ -46,12 +37,19 @@ VV=jacobian(Vfun, [Hi1 Hi2 Hi3 Ei Li Ve Vi]);
 FF
 VV
 
+%%
+
 %%% Find matrix F and V
 %%%% Evaluate FF and VV at disease free equilibrium
 %%%% Only need to set infection compartments [I, As, Is, F, X, Ms, V] as zeros
 
 MatrixF=subs(FF, [Hi1 Hi2 Hi3 Ei Li Ve Vi], [0, 0, 0, 0, 0, 0, 0])
 MatrixV=subs(VV, [Hi1 Hi2 Hi3 Ei Li Ve Vi], [0, 0, 0, 0, 0, 0, 0])
+
+MatrixF
+MatrixV
+
+%%
 
 %%%%% Compute F*V^{-1}
 RR=-MatrixF*inv(MatrixV)
