@@ -72,12 +72,13 @@ NH=p(22);
 Lambda = p(30)
 gamma = p(31) % Host natural death rate
 omega = p(32) %Host-to-Host Contact Rate
-p_hh =    p(33) %Host-to-Host Transmission Probability
+p_hh = p(33) %Host-to-Host Transmission Probability
 
 c_h = p(34) % Host carrying capacity
+NH = p(34)
 
-d_l=((rs*m_l*qs/muV)-muL-m_l)/c_l; % density-dependent death rate for larvae
-d_h = (Lambda - gamma)/c_h % density-dependent death rate for host
+d_l=((rs*m_l*qs/muV)-muL-m_l); % density-dependent death rate for larvae
+d_h = (Lambda - gamma) % density-dependent death rate for host
 
 %%%%eivenvalues are copied from  eig=solve(p, lambda)
 sol1=double(subs(eigen_values(1)));
