@@ -23,12 +23,14 @@ else
     title(figure_title)
     exportgraphics(gcf,file_name)
 end
+
+% Adult Vector Density
 hold off
 hold off
 figure
 hold on
-plot(tt,x(:,3:7),'LineWidth',4)
-legend('L_S', 'L_I', 'V_S', 'V_E', 'V_I','FontSize', 12);
+plot(tt,x(:,5:7),'LineWidth',4)
+legend('V_S', 'V_E', 'V_I','FontSize', 12);
 xlabel('Time (Days)', 'FontSize', 12);
 ylabel('Density (Individuals/m^2)', 'FontSize', 12);
 if control_type==1
@@ -47,6 +49,9 @@ else
     title(figure_title)
     exportgraphics(gcf,file_name)
 end
+
+% Host Density
+
 hold off
 figure
 hold on
