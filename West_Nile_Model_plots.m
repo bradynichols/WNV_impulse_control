@@ -65,7 +65,7 @@ legend('H_S','H_I','H_R','FontSize', 12);
 xlabel('Time (Days)', 'FontSize', 12);
 ylabel('Density (Individuals/m^2)', 'FontSize', 12);
 title('Single-Compartment Host Density');
-file_name=sprintf('Single_Compartment_Host_Density_3.eps',Tf);
+file_name=sprintf('Single_Compartment_Host_Density_3_Long_Version.eps',Tf);
 exportgraphics(gcf,file_name);
 % 
 % if control_type==1
