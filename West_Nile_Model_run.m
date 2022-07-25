@@ -47,7 +47,7 @@ function [tt,x] = West_Nile_Model_run(larvicide_type)
 % generate parameters
 % Duration of simulation
 
-Tf=200;
+Tf=150;
 
 p = System_parametersRL(larvicide_type,Tf);
 

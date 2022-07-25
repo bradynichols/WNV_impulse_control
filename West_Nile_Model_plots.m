@@ -1,29 +1,6 @@
 function [] = West_Nile_Model_plots(tt,x,control_type,Obj_type,N,Tf,J,J_comp,larvicide_type)
 
 hold off
-figure
-hold on
-plot(tt,x(:,1:2),'LineWidth',4)
-legend('e_s', 'e_i','FontSize', 12);
-xlabel('time (days)', 'FontSize', 12);
-ylabel('density (ind/m^2)', 'FontSize', 12);
-if control_type==1
-    file_name=sprintf('vector_control_eggs_fixed_times_T=%.2f_N=%.2f_Obj_fun=%.0f.eps',Tf,N,Obj_type);
-    figure_title=sprintf('eggs with fixed-time control (N = %.2f, T = %.2f, Obj fun = %.0f)',N,Tf,Obj_type);
-    title(figure_title)
-    exportgraphics(gcf,file_name)
-elseif control_type==2
-    file_name=sprintf('eggs_variable_times_T=%.2f_N=%.2f_Obj_fun=%.0f.eps',Tf,N,Obj_type);
-    figure_title=sprintf('eggs with variable-time control (N = %.2f, T = %.2f, Obj fun = %.0f)',N,Tf,Obj_type);
-    title(figure_title)
-    exportgraphics(gcf,file_name)
-else 
-    file_name=sprintf('eggs_no_control_T=%.2f.eps',Tf);
-    figure_title=sprintf('egg density without control');
-    title(figure_title)
-    exportgraphics(gcf,file_name)
-end
-hold off
 hold off
 figure
 hold on
@@ -76,83 +53,60 @@ else
     exportgraphics(gcf,file_name)
 end
 
-% Plots suscpetible host populations
+% Plots ALL Lifestages Vector Populations
 
 hold off
 figure
 hold on
-plot(tt,x(:,8:10),'LineWidth', 4)
-legend('H_1s', 'H_2s', 'H_3s', 'FontSize', 12);
+plot(tt,x(:,1:7),'LineWidth', 4)
+legend('Es', 'Ei', 'Ls', 'Li', 'Vs', 'Ve', 'Vi', 'FontSize', 12);
 xlabel('time (days)', 'FontSize', 12);
 ylabel('density (ind/m^2)', 'FontSize', 12);
-if control_type==1
-    file_name=sprintf('hosts_fixed_times_T=%.2f_N=%.2f_Obj_fun=%.0f.eps',Tf,N,Obj_type);
-    figure_title=sprintf('hosts with fixed-time control (N = %.2f, T = %.2f, Obj fun = %.0f)',N,Tf,Obj_type);
-    title(figure_title)
-    exportgraphics(gcf,file_name)
-elseif control_type==2
-    file_name=sprintf('hosts_variable_times_T=%.2f_N=%.2f_Obj_fun=%.0f.eps',Tf,N,Obj_type);
-    figure_title=sprintf('hosts with variable-time control (N = %.2f, T = %.2f, Obj fun = %.0f)',N,Tf,Obj_type);
-    title(figure_title)
-    exportgraphics(gcf,file_name)
-else 
-    file_name=sprintf('hosts_no_control_T=%.2f.eps',Tf);
-    figure_title=sprintf('host density without control');
-    title(figure_title)
-    exportgraphics(gcf,file_name)
-end
+figure_title=sprintf('Vector Density Through Early Season');
 
-% Plots infected host population
+% Plots Adult Vector Populations
 
 hold off
 figure
 hold on
-plot(tt,x(:,11:13),'LineWidth', 4)
-legend('H_1i', 'H_2i', 'H_3i', 'FontSize', 12);
-xlabel('time (days)', 'FontSize', 12);
-ylabel('density (ind/m^2)', 'FontSize', 12);
-if control_type==1
-    file_name=sprintf('hosts_fixed_times_T=%.2f_N=%.2f_Obj_fun=%.0f.eps',Tf,N,Obj_type);
-    figure_title=sprintf('hosts with fixed-time control (N = %.2f, T = %.2f, Obj fun = %.0f)',N,Tf,Obj_type);
-    title(figure_title)
-    exportgraphics(gcf,file_name)
-elseif control_type==2
-    file_name=sprintf('hosts_variable_times_T=%.2f_N=%.2f_Obj_fun=%.0f.eps',Tf,N,Obj_type);
-    figure_title=sprintf('hosts with variable-time control (N = %.2f, T = %.2f, Obj fun = %.0f)',N,Tf,Obj_type);
-    title(figure_title)
-    exportgraphics(gcf,file_name)
-else 
-    file_name=sprintf('hosts_no_control_T=%.2f.eps',Tf);
-    figure_title=sprintf('host density without control');
-    title(figure_title)
-    exportgraphics(gcf,file_name)
-end
+plot(tt,x(:,5:7),'LineWidth', 4)
+legend('Vs', 'Ve', 'Vi', 'FontSize', 12);
+xlabel('Time (Days)', 'FontSize', 12);
+ylabel('Density (Individuals/m^2)', 'FontSize', 12);
+title('Adult Vector Density');
 
-% Plots recovered host population
+% Plots Host 1 Populations
 
 hold off
 figure
 hold on
-plot(tt,x(:,14:16),'LineWidth', 4)
-legend('H_1r', 'H_2r', 'H_3r', 'FontSize', 12);
-xlabel('time (days)', 'FontSize', 12);
-ylabel('density (ind/m^2)', 'FontSize', 12);
-if control_type==1
-    file_name=sprintf('hosts_fixed_times_T=%.2f_N=%.2f_Obj_fun=%.0f.eps',Tf,N,Obj_type);
-    figure_title=sprintf('hosts with fixed-time control (N = %.2f, T = %.2f, Obj fun = %.0f)',N,Tf,Obj_type);
-    title(figure_title)
-    exportgraphics(gcf,file_name)
-elseif control_type==2
-    file_name=sprintf('hosts_variable_times_T=%.2f_N=%.2f_Obj_fun=%.0f.eps',Tf,N,Obj_type);
-    figure_title=sprintf('hosts with variable-time control (N = %.2f, T = %.2f, Obj fun = %.0f)',N,Tf,Obj_type);
-    title(figure_title)
-    exportgraphics(gcf,file_name)
-else 
-    file_name=sprintf('hosts_no_control_T=%.2f.eps',Tf);
-    figure_title=sprintf('host density without control');
-    title(figure_title)
-    exportgraphics(gcf,file_name)
-end
+plot(tt,x(:,8), tt,x(:,11), tt,x(:,14), 'LineWidth', 4)
+legend('Hs1', 'Hi1', 'Hr1', 'FontSize', 12);
+xlabel('Time (Days)', 'FontSize', 12);
+ylabel('Density (Individuals/m^2)', 'FontSize', 12);
+title('Host 1 Density');
+
+% Plots Host 2 Populations
+
+hold off
+figure
+hold on
+plot(tt,x(:,9), tt,x(:,12), tt,x(:,15), 'LineWidth', 4)
+legend('Hs2', 'Hi2', 'Hr2', 'FontSize', 12);
+xlabel('Time (Days)', 'FontSize', 12);
+ylabel('Density (Individuals/m^2)', 'FontSize', 12);
+title('Host 2 Density');
+
+% Plots Host 3 Populations
+
+hold off
+figure
+hold on
+plot(tt,x(:,10), tt,x(:,13), tt,x(:,16), 'LineWidth', 4)
+legend('Hs3', 'Hi3', 'Hr3', 'FontSize', 12);
+xlabel('Time (Days)', 'FontSize', 12);
+ylabel('Density (Individuals/m^2)', 'FontSize', 12);
+title('Host 3 Density');
 
 % Control, Not Needed for Initial Bird Demographic Model
 
@@ -193,4 +147,28 @@ end
 % end
 % end
 
-
+% hold off
+% figure
+% hold on
+% plot(tt,x(:,1:2),'LineWidth',4)
+% legend('e_s', 'e_i','FontSize', 12);
+% xlabel('time (days)', 'FontSize', 12);
+% ylabel('density (ind/m^2)', 'FontSize', 12);
+% if control_type==1
+%     file_name=sprintf('vector_control_eggs_fixed_times_T=%.2f_N=%.2f_Obj_fun=%.0f.eps',Tf,N,Obj_type);
+%     figure_title=sprintf('eggs with fixed-time control (N = %.2f, T = %.2f, Obj fun = %.0f)',N,Tf,Obj_type);
+%     title(figure_title)
+%     exportgraphics(gcf,file_name)
+% elseif control_type==2
+%     file_name=sprintf('eggs_variable_times_T=%.2f_N=%.2f_Obj_fun=%.0f.eps',Tf,N,Obj_type);
+%     figure_title=sprintf('eggs with variable-time control (N = %.2f, T = %.2f, Obj fun = %.0f)',N,Tf,Obj_type);
+%     title(figure_title)
+%     exportgraphics(gcf,file_name)
+% else 
+%     file_name=sprintf('eggs_no_control_T=%.2f.eps',Tf);
+%     figure_title=sprintf('egg density without control');
+%     title(figure_title)
+%     exportgraphics(gcf,file_name)
+% end
+% 
+% 

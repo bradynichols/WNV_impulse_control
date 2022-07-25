@@ -20,27 +20,24 @@ dVi = m_l*Li + kl*Ve - muV*Vi - km2*Vi*Ua;
 
 % Host ODEs
 
-dHs1 = Lambda1*NH1 - b*p_mh*Vi*Hs1/NH1 - omega1*p_hh1*Hi1*Hs1/NH1 - d_h1*NH1*Hs1/c_h1 - mu_h1*Hs1; % Updated 07/20/2022
+dHs1 = Lambda1*NH1 - b*p_mh*Vi*Hs1/NH1 - omega1*p_hh1*Hi1*Hs1/NH1 - d_h1*NH1*Hs1/c_h1 - mu_h1*Hs1;
 dHs2 = Lambda2*NH2 - b*p_mh*Vi*Hs2/NH2 - omega2*p_hh2*Hi2*Hs2/NH2 - d_h2*NH2*Hs2/c_h2 - mu_h2*Hs2;
 dHs3 = Lambda3*NH3 - b*p_mh*Vi*Hs3/NH3 - omega3*p_hh3*Hi3*Hs3/NH3 - d_h3*NH3*Hs3/c_h3 - mu_h3*Hs3;
-dHi1 = b*p_mh*Vi*Hs1/NH1 + omega1*p_hh1*Hi1*Hs1/NH1 - (gamma1+g1)*Hi1 - d_h1*NH1*Hi1/c_h1 - mu_h1*Hi1; % Updated 07/20/2022
+dHi1 = b*p_mh*Vi*Hs1/NH1 + omega1*p_hh1*Hi1*Hs1/NH1 - (gamma1+g1)*Hi1 - d_h1*NH1*Hi1/c_h1 - mu_h1*Hi1;
 dHi2 = b*p_mh*Vi*Hs2/NH2 + omega2*p_hh2*Hi2*Hs2/NH2 - (gamma2+g2)*Hi2 - d_h2*NH2*Hi2/c_h2 - mu_h2*Hi2;
 dHi3 = b*p_mh*Vi*Hs3/NH3 + omega3*p_hh3*Hi3*Hs3/NH3 - (gamma3+g3)*Hi3 - d_h3*NH3*Hi3/c_h3 - mu_h3*Hi3;
-dHr1 = g1*Hi1 - d_h1*NH1*Hr1 - mu_h1*Hr1; % Updated 07/20/2022
-dHr2 = g2*Hi2 - d_h2*NH2*Hr2 - mu_h2*Hr2;
-dHr3 = g3*Hi3 - d_h3*NH3*Hr3 - mu_h3*Hr3;
+dHr1 = g1*Hi1 - d_h1*NH1*Hr1/c_h1 - mu_h1*Hr1;
+dHr2 = g2*Hi2 - d_h2*NH2*Hr2/c_h2 - mu_h2*Hr2;
+dHr3 = g3*Hi3 - d_h3*NH3*Hr3/c_h3 - mu_h3*Hr3;
 
 %Chemical ODEs
 
 dUl = -gl*Ul;
 dUa = -ga*Ua;
     
-    
 % Integral State ODE
 
-% dx_int = cV*(Vi+Vs+Ve); 
 dx_int=(Vi+Hi1 + Hi2 + Hi3);
-
 
 % NEEDS UPDATE
 
