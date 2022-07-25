@@ -58,7 +58,14 @@ NH=p(22);
 %healthy, summer ic. starts from DFE%
 %ic = [ic_E;0;C;0;ic_V;0;0;NH;0;0;0;0;0];
 %diseased
-ic = [ic_E;0;c_l;0;ic_V;0;.01*ic_V;NH;0;0;0;0;0];
+ic = [ic_E;0;c_l;0;ic_V;0;0;NH;0;0;0;0;0];
+
+% Hs1 = c_h1
+% Hs2 = c_h2
+% Hs3 = c_h3
+% Ls = c_l
+% Vs = c_l*m_l/muV
+% Es = c_l*m_l*rs/(muV*m_e)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
