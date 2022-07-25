@@ -4,9 +4,9 @@ hold off
 figure
 hold on
 plot(tt,x(:,1:2),'LineWidth',4)
-legend('e_s', 'e_i','FontSize', 12);
-xlabel('time (days)', 'FontSize', 12);
-ylabel('density (ind/m^2)', 'FontSize', 12);
+legend('E_S', 'E_I','FontSize', 12);
+xlabel('Time (Days)', 'FontSize', 12);
+ylabel('Density (Individuals/m^2)', 'FontSize', 12);
 if control_type==1
     file_name=sprintf('vector_control_eggs_fixed_times_T=%.2f_N=%.2f_Obj_fun=%.0f.eps',Tf,N,Obj_type);
     figure_title=sprintf('eggs with fixed-time control (N = %.2f, T = %.2f, Obj fun = %.0f)',N,Tf,Obj_type);
@@ -28,9 +28,9 @@ hold off
 figure
 hold on
 plot(tt,x(:,3:7),'LineWidth',4)
-legend('l_s', 'l_i', 'v_s', 'v_e', 'v_i','FontSize', 12);
-xlabel('time (days)', 'FontSize', 12);
-ylabel('density (ind/m^2)', 'FontSize', 12);
+legend('L_S', 'L_I', 'V_S', 'V_E', 'V_I','FontSize', 12);
+xlabel('Time (Days)', 'FontSize', 12);
+ylabel('Density (Individuals/m^2)', 'FontSize', 12);
 if control_type==1
     file_name=sprintf('vector_control_vectors_fixed_times_T=%.2f_N=%.2f_Obj_fun=%.0f.eps',Tf,N,Obj_type);
     figure_title=sprintf('vectors with fixed-time control (N = %.2f, T = %.2f, Obj fun = %.0f)',N,Tf,Obj_type);
@@ -43,7 +43,7 @@ elseif control_type==2
     exportgraphics(gcf,file_name)
 else 
     file_name=sprintf('vectors_no_control_T=%.2f.eps',Tf);
-    figure_title=sprintf('vector density without control');
+    figure_title=sprintf('Single-Compartment Vector Density');
     title(figure_title)
     exportgraphics(gcf,file_name)
 end
@@ -51,9 +51,9 @@ hold off
 figure
 hold on
 plot(tt,x(:,8:10),'LineWidth',4)
-legend('h_s','h_i','h_r','FontSize', 12);
-xlabel('time (days)', 'FontSize', 12);
-ylabel('density (ind/m^2)', 'FontSize', 12);
+legend('H_S','H_I','H_R','FontSize', 12);
+xlabel('Time (Days)', 'FontSize', 12);
+ylabel('Density (Individuals/m^2)', 'FontSize', 12);
 if control_type==1
     file_name=sprintf('hosts_fixed_times_T=%.2f_N=%.2f_Obj_fun=%.0f.eps',Tf,N,Obj_type);
     figure_title=sprintf('hosts with fixed-time control (N = %.2f, T = %.2f, Obj fun = %.0f)',N,Tf,Obj_type);
@@ -66,7 +66,7 @@ elseif control_type==2
     exportgraphics(gcf,file_name)
 else 
     file_name=sprintf('hosts_no_control_T=%.2f.eps',Tf);
-    figure_title=sprintf('host density without control');
+    figure_title=sprintf('Single-Compartment Host Density');
     title(figure_title)
     exportgraphics(gcf,file_name)
 end
@@ -75,7 +75,7 @@ figure
 hold on
 plot(tt,x(:,11:12),'LineWidth',4)
 legend('u_l', 'u_a','FontSize', 12);
-xlabel('time (days)', 'FontSize', 12);
+xlabel('Time (Days)', 'FontSize', 12);
 ylabel('normalized level', 'FontSize', 12);
 if control_type==1
     file_name=sprintf('fixed-time_controls_T=%.2f_N=%.2f_Obj_fun=%.0f.eps',Tf,N,Obj_type);
@@ -98,7 +98,7 @@ p=System_parametersRL(larvicide_type,Tf);
 days=0:.1:150;
 perc_ef=1-(p(7)+p(8))./(exp(-days*p(17))*p(19)+p(7)+p(8));
 plot(days,perc_ef,'LineWidth',4)
-xlabel('time (days)', 'FontSize', 12);
+xlabel('Time (Days)', 'FontSize', 12);
 ylabel('instantaneous percent control of adult emergence', 'FontSize', 12);
 file_name=sprintf('percent_control_adult_emergence.eps');
     figure_title=sprintf('Instantaneous percent control of adult emergence through time');
