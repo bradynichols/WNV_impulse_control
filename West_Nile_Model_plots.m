@@ -5,7 +5,7 @@ function [] = West_Nile_Model_plots(tt,x,control_type,Obj_type,N,Tf,J,J_comp,lar
 hold off
 figure
 hold on
-plot(tt,x(:,5:7),'LineWidth', 4)
+plot(tt,x(:,5:7),'-')
 legend('Vs', 'Ve', 'Vi', 'FontSize', 12);
 xlabel('Time (Days)', 'FontSize', 12);
 ylabel('Density (Individuals/m^2)', 'FontSize', 12);
