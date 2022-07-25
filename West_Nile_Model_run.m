@@ -46,11 +46,9 @@ function [tt,x] = West_Nile_Model_run(larvicide_type)
 % Model Parameters
 % generate parameters
 % Duration of simulation
-<<<<<<< Updated upstream
-Tf=5000;
-=======
-Tf=1500;
->>>>>>> Stashed changes
+
+Tf=200;
+
 p = System_parametersRL(larvicide_type,Tf);
 
 % Initial conditions for discrete/continuous state variables
@@ -70,15 +68,12 @@ c_h3 = p(37); % carrying capacity host group 3
 ic_V = m_l*c_l/muV;
 ic_E = rs*m_l*c_l/(m_e*muV);
 
-c_h1 = p(35);
-c_h2 = p(36);
-c_h3 = p(37);
-
 % Initial conditions for discrete/continuous state variables
 % healthy, summer ic. starts from DFE%
 %ic = [ic_E;0;C;0;ic_V;0;0;NH;0;0;0;0;0];
 %diseased
-ic = [ic_E;0;c_l;0;ic_V;0;.01*ic_V;c_h1;c_h2;c_h3;0;0;0;0;0;0;0;0;0];
+% ic = [ic_E;0;c_l;0;ic_V;0;.01*ic_V;c_h1;c_h2;c_h3;0;0;0;0;0;0;0;0;0];
+ic = [ic_E;0;c_l;0;ic_V;0;0.01*ic_V;c_h1;c_h2;c_h3;0;0;0;0;0;0;0;0;0];
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

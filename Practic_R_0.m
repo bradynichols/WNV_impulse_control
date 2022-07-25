@@ -48,3 +48,7 @@ sol=[sol1 sol2 sol3 sol4]
 % %%%% largest eigenvalue is R0
 [subR0,max_index]=max(sol)
 R0=eigen_values(max_index)
+
+
+syms n1 n2 n3 n4 n5 n6 n7 n8 n9 n10 j1 j2 j3 j4 j5 j6 j7 j8
+
