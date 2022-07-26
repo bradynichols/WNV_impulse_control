@@ -144,6 +144,8 @@ j2 = (b*c_l*m_l*p_hm1)/(c_h1*muV)
 j3 = b*p_mh
 j4 = ri
 
+MatrixV = subs(MatrixV, [ -kl-muV kl -muV], [n1 n2 n3 n4 n5 n6 n7 n8])
+
 n1 = (-d_h1*c_h3)-g1-gamma1-mu_h1
 n2 = -m_e
 n3 = m_e*phi*qi

@@ -13,14 +13,12 @@ syms p_hm1 p_hm2 p_hm3 omega1 omega2 omega3 p_hh1 p_hh2 p_hh3 g1 g2 g3
 syms gamma1 gamma2 gamma3 mu_h1 mu_h2 mu_h3 c_h1 c_h2 c_h3 d_h1 d_h2 d_h3 Lambda1 Lambda2 Lambda3
 
 % DFE
-% Hs1 = c_h1
-% Hs2 = c_h2
-% Hs3 = c_h3
-% Ls = c_l
-% Vs = c_l*m_l/muV
-% Es = c_l*m_l*rs/(muV*m_e)
-
+Hs1 = c_h1;
+Hs2 = c_h2;
+Hs3 = c_h3;
+Ls = c_l;
 Vs = c_l*m_l/muV;
+Es = c_l*m_l*rs/(muV*m_e);
 
 %%% Compute Jacobian
 %%%%% F=new infections, V=transfer between compartments 
@@ -28,7 +26,7 @@ Vs = c_l*m_l/muV;
 
 Ffun=[p_mh*b*Vi+p_hh2*omega2*Hi2, ri*Vi, 0, b*p_hm2*Vs*Hi2/c_h2, 0]
 
-Vfun=[-gamma2*Hi2-g2*Hi2-d_h2*Hi2-mu_h2*Hi2, -m_e*Ei, m_e*qi*phi*Ei-muL*Li-m_l*Li-d_l*Li, -kl*Ve-muV*Ve, m_l*Li+kl*Ve-muV*Vi]
+Vfun=[-gamma2*Hi2-g2*Hi2-d_h2*Hs2*Hi2-mu_h2*Hi2, -m_e*Ei, m_e*qi*phi*Ei-muL*Li-m_l*Li-d_l*Ls*Li, -kl*Ve-muV*Ve, m_l*Li+kl*Ve-muV*Vi]
 
 %%%% Compute the jacobian with respect to infection compartments: [Hi1 Ei Li Ve Vi]
 
@@ -41,14 +39,14 @@ VV
 %%%% Evaluate FF and VV at disease free equilibrium
 %%%% Only need to set infection compartments [I, As, Is, F, X, Ms, V] as zeros
 
-MatrixF=subs(FF, [Hi2 Ei Li Ve Vi], [0, 0, 0, 0, 0])
-MatrixV=subs(VV, [Hi2 Ei Li Ve Vi], [0, 0, 0, 0, 0])
+MatrixF=subs(FF, [Hi2 Ei Li Ve Vi], [0, 0, 0, 0, 0]);
+MatrixV=subs(VV, [Hi2 Ei Li Ve Vi], [0, 0, 0, 0, 0]);
 
 MatrixF
 MatrixV
 
-MatrixF = subs(MatrixF, [omega2*p_hh2 (b*c_l*m_l*p_hm2)/(c_h2*muV) b*p_mh ri], [j1 j2 j3 j4]);
-MatrixV = subs(MatrixV, [-d_h2-g2-gamma2-mu_h2 -m_e m_e*phi*qi -d_l-m_l-muL m_l -kl-muV kl -muV], [n1 n2 n3 n4 n5 n6 n7 n8]);
+MatrixF = subs(MatrixF, [omega2*p_hh2 (b*c_l*m_l*p_hm2)/(c_h2*muV) b*p_mh ri], [j1 j2 j3 j4])
+MatrixV = subs(MatrixV, [(-d_h2*c_h2)-g2-gamma2-mu_h2 -m_e m_e*phi*qi (-d_l*c_l)-m_l-muL m_l -kl-muV kl -muV], [n1 n2 n3 n4 n5 n6 n7 n8])
 
 %%%%% Compute F*V^{-1}
 RR=-MatrixF*inv(MatrixV)
@@ -135,20 +133,20 @@ ga = p(41); % adulticide decay rate
 
 cV = p(42); % weight of cost of vectors in objective functional
 
-d_l=((rs*m_l*qs/muV)-muL-m_l); % density-dependent death rate for larvae
-d_h1 = (Lambda1 - mu_h1); % density-dependent death rate for host group 1
-d_h2 = (Lambda2 - mu_h2); % density-dependent death rate for host group 2
-d_h3 = (Lambda3 - mu_h3); % density-dependent death rate for host group 3
+d_l=((rs*m_l*qs/muV)-muL-m_l)/c_l; % density-dependent death rate for larvae
+d_h1 = (Lambda1 - mu_h1)/c_h1; % density-dependent death rate for host group 1
+d_h2 = (Lambda2 - mu_h2)/c_h2; % density-dependent death rate for host group 2
+d_h3 = (Lambda3 - mu_h3)/c_h3; % density-dependent death rate for host group 3
 
 j1 = omega2*p_hh2
 j2 = (b*c_l*m_l*p_hm2)/(c_h2*muV)
 j3 = b*p_mh
 j4 = ri
 
-n1 = -d_h2-g2-gamma2-mu_h2
+n1 = (-d_h2*c_h2)-g2-gamma2-mu_h2
 n2 = -m_e
 n3 = m_e*phi*qi
-n4 = d_l-m_l-muL
+n4 = (-d_l*c_l)-m_l-muL
 n5 = m_l
 n6 = -kl-muV
 n7 = kl
