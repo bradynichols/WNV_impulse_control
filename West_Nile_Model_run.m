@@ -24,7 +24,7 @@ function [tt,x] = West_Nile_Model_run(larvicide_type)
 %Artifical State
 %int_0^t{cV*cV*(Vi(s)+Vs(s)+Ve(s)}ds=x(13)
 
-NH = Hs+Hi+Hr;           %total hosts
+% NH = Hs+Hi+Hr;           %total hosts
 
 
 %The continuous state has 13 components. 
@@ -35,7 +35,7 @@ NH = Hs+Hi+Hr;           %total hosts
 %Model Parameters
 %generate parameters
 %Duration of simulation
-Tf=1500;
+Tf=150;
 p = System_parametersRL(larvicide_type,Tf);
 
 % Initial conditions for discrete/continuous state variables

@@ -34,7 +34,7 @@ legend('V_S', 'V_E', 'V_I','FontSize', 12);
 xlabel('Time (Days)', 'FontSize', 12);
 ylabel('Density (Individuals/m^2)', 'FontSize', 12);
 title('Single-Compartment Vector Density');
-file_name=sprintf('Single_Compartment_Vector_Density_3.eps',Tf);
+file_name=sprintf('Single_Compartment_Vector_Density_4.eps',Tf);
 exportgraphics(gcf,file_name);
 
 % if control_type==1
@@ -60,12 +60,12 @@ hold off
 figure
 hold on
 plot(tt,x(:,8:10),'-','LineWidth',4)
-set(gcf,'position',[0,0,1100,450])
+% set(gcf,'position',[0,0,1100,450])
 legend('H_S','H_I','H_R','FontSize', 12);
 xlabel('Time (Days)', 'FontSize', 12);
 ylabel('Density (Individuals/m^2)', 'FontSize', 12);
 title('Single-Compartment Host Density');
-file_name=sprintf('Single_Compartment_Host_Density_3_Long_Version.eps',Tf);
+file_name=sprintf('Single_Compartment_Host_Density_4_Long.eps',Tf);
 exportgraphics(gcf,file_name);
 % 
 % if control_type==1
