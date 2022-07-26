@@ -163,7 +163,7 @@ sol3=double(subs(eigen_values(3)));
 sol4=double(subs(eigen_values(4)));
 sol5=double(subs(eigen_values(5)));
 
-sol=[sol1 sol2 sol3 sol4 sol5]
+sol=[sol1 sol2 sol3 sol4 sol5] 
 
 % %%%% largest eigenvalue is R0
 [subR0,max_index]=max(sol)

@@ -5,11 +5,13 @@ function [] = West_Nile_Model_plots(tt,x,control_type,Obj_type,N,Tf,J,J_comp,lar
 hold off
 figure
 hold on
-plot(tt,x(:,5:7),'-')
-legend('Vs', 'Ve', 'Vi', 'FontSize', 12);
+plot(tt,x(:,5:7),'Linewidth', 4)
+legend('V_S', 'V_E', 'V_I', 'FontSize', 12);
 xlabel('Time (Days)', 'FontSize', 12);
 ylabel('Density (Individuals/m^2)', 'FontSize', 12);
-title('Adult Vector Density');
+title('Multiple Compartment Vector Density');
+file_name=sprintf('Multiple_Compartment_Model_Vector_Density.eps',Tf);
+exportgraphics(gcf,file_name);
 
 % Plots Host 1 Populations
 
@@ -17,10 +19,12 @@ hold off
 figure
 hold on
 plot(tt,x(:,8), tt,x(:,11), tt,x(:,14), 'LineWidth', 4)
-legend('Hs1', 'Hi1', 'Hr1', 'FontSize', 12);
+legend('H_{S1}', 'H_{I1}', 'H_{R1}', 'FontSize', 12);
 xlabel('Time (Days)', 'FontSize', 12);
 ylabel('Density (Individuals/m^2)', 'FontSize', 12);
-title('Host 1 Density');
+title('Multiple Compartment Host 1 Density');
+file_name=sprintf('Multiple_Compartment_Model_Host1_Density.eps',Tf);
+exportgraphics(gcf,file_name);
 
 % Plots Host 2 Populations
 
@@ -28,10 +32,12 @@ hold off
 figure
 hold on
 plot(tt,x(:,9), tt,x(:,12), tt,x(:,15), 'LineWidth', 4)
-legend('Hs2', 'Hi2', 'Hr2', 'FontSize', 12);
+legend('H_{S2}', 'H_{I2}', 'H_{R2}', 'FontSize', 12);
 xlabel('Time (Days)', 'FontSize', 12);
 ylabel('Density (Individuals/m^2)', 'FontSize', 12);
-title('Host 2 Density');
+title('Multiple Compartment Host 2 Density');
+file_name=sprintf('Multiple_Compartment_Model_Host2_Density.eps',Tf);
+exportgraphics(gcf,file_name);
 
 % Plots Host 3 Populations
 
@@ -39,10 +45,12 @@ hold off
 figure
 hold on
 plot(tt,x(:,10), tt,x(:,13), tt,x(:,16), 'LineWidth', 4)
-legend('Hs3', 'Hi3', 'Hr3', 'FontSize', 12);
+legend('H_{S3}', 'H_{I3}', 'H_{R3}', 'FontSize', 12);
 xlabel('Time (Days)', 'FontSize', 12);
 ylabel('Density (Individuals/m^2)', 'FontSize', 12);
-title('Host 3 Density');
+title('Multiple Compartment Host 3 Density');
+file_name=sprintf('Multiple_Compartment_Model_Host3_Density.eps',Tf);
+exportgraphics(gcf,file_name);
 
 % Control, Not Needed for Initial Bird Demographic Model
 
