@@ -8,12 +8,12 @@
 %%%%%
 clear
 syms Hi Ei Li Ve Vi
-syms rs ri phi qs qi m_e m_l muL muV b c_l kl p_hm p_mh dh g gl ga km1 km2 cV d_l NH gamma omega p_hh % Included gamma, omega, p_hh
+syms rs ri phi qs qi m_e m_l mu_h muL muV b c_l kl p_hm p_mh dh g gl ga km1 km2 cV d_l gamma omega p_hh % Included gamma, omega, p_hh
 %%%Compute Jacobian
 %%%%%F=new infections, V=transfer between compartments
 %%%%Only need to focus on infection compartments: [Hi Ei Li Ve Vi]
-Ffun=[p_mh*b*Vi + omega*p_hh*Hi, ri*Vi, 0, b*p_mh*m_l*Hi*c_l/(NH*muV), 0]; % Updated to inlcude new interaction term % + omega*p_hh*Hi % 
-Vfun=[-dh*Hi-g*Hi - gamma*Hi, -m_e*Ei, m_e*qi*phi*Ei-muL*Li-m_l*Li-d_l*Li, -kl*Ve-muV*Ve, m_l*Li+kl*Ve-muV*Vi]; % Updated to include gamma %-gamma*Hi% 
+Ffun=[p_mh*b*Vi + omega*p_hh*Hi, ri*Vi, 0, b*p_mh*m_l*Hi*c_l/(c_h*muV), 0]; % Updated to inlcude new interaction term % + omega*p_hh*Hi % 
+Vfun=[-dh*Hi-g*Hi-gamma*Hi-mu_h*Hi, -m_e*Ei, m_e*qi*phi*Ei-muL*Li-m_l*Li-d_l*Li, -kl*Ve-muV*Ve, m_l*Li+kl*Ve-muV*Vi]; % Updated to include gamma %-gamma*Hi% 
 %%%%Compute the jacobian with respect to infection compartments: [Hi Ei Li Ve Vi]
 FF=jacobian(Ffun, [Hi Ei Li Ve Vi]);
 VV=jacobian(Vfun, [Hi Ei Li Ve Vi]);
@@ -35,12 +35,7 @@ eigen_values=[];
 for i=1:num_factors
 eigen_values=[eigen_values; solve(pp_factors(i)==0, lambda,'MaxDegree', 5)];
 end
-%%%%%eigenvalues are given, the largest one is R0
-%%%%%Comment out the following if you just need a symbolic expression of R0
-%%%%%Numerical example, Largest eigenvalue is spectral radius (R0)
 
-%%%set values for parameters. note the argument is for plotting decay in
-%%%larvicidal effect and does not impact this computation.
 p = System_parametersRL(1,90);
 Nh=p(22);
 %Vector parameters
@@ -59,7 +54,7 @@ c_l = p(11);             %mosquito carrying capacity
 kl = p(12);           %disease progression (1/latency period)
 p_hm = p(13);     %host-to-mosquito transmission
 p_mh = p(14);     %mosquito-to-host transmission
-dh = p(15);           %induced host mortality
+gamma = p(15);           % WNV induced host mortality
 g = p(16);            %host recovery rate
 gl=p(17);
 ga=p(18);
@@ -67,10 +62,8 @@ km1=p(19);
 km2=p(20);
 cV=p(21);                   %weight of cost of vectors in objective functional
 
-NH=p(22);
-
-Lambda = p(30)
-gamma = p(31) % Host natural death rate
+Lambda = p(30) % Host birth rate
+mu_h = p(31) % Host natural death rate
 omega = p(32) %Host-to-Host Contact Rate
 p_hh = p(33) %Host-to-Host Transmission Probability
 
@@ -78,7 +71,7 @@ c_h = p(34) % Host carrying capacity
 NH = p(34)
 
 d_l=((rs*m_l*qs/muV)-muL-m_l); % density-dependent death rate for larvae
-d_h = (Lambda - gamma) % density-dependent death rate for host
+d_h = (Lambda - mu_h) % density-dependent death rate for host
 
 %%%%eivenvalues are copied from  eig=solve(p, lambda)
 sol1=double(subs(eigen_values(1)));

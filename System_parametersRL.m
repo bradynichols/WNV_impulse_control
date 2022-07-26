@@ -69,7 +69,6 @@ p(12) = 1/10;  %disease progression in mosquitoes (1/latency period)
 %Cite West Nile Virus Infection Decreases Fecundity of Culex tarsalis Females
 p(14) = 0.5;   %host-to-mosquito transmission
 p(13) = 0.3111312377;   %mosquito-to-host transmission
-%cite West Nile Virus Infection Decreases Fecundity of Culex tarsalis Females
 p(15) = 0.01672790387;   %WNV-induced death rate. This is just an estimate. Cite Komar (see below).
 p(16) = 0.1121256665;   %host recovery rate (1/infection period), 
                %Viremia was detectable for up to seven days post inoculation.
@@ -211,7 +210,7 @@ p(20)=-log(0.1)*p(18)*2;
 per_remain_one_hour=exp(p(20)*0.5*exp(-p(18)/24)/p(18)-p(20)*0.5/p(18));
 
 
-p(22)=.00153; % population density of avian species in a residential area
+p(22)=.0015; % population density of avian species in a residential area
 
 %urban bird densities varied between 
 %281 birds / 10 ha = 281 birds / 100,000 m^2 = 0.0028 birds/m^2 and 
@@ -265,6 +264,6 @@ p(32) = 2.5768/7;
 p(33) = 0.02960806276;
 
 %Host Carrying Capacity
-p(34) = .00153;
+p(34) = .0015;
 
 end
