@@ -67,13 +67,11 @@ p(11)=.01;       %residential area; see paper for references MOSQUITO (LARVAE) C
         
 p(12) = 1/10;  %disease progression in mosquitoes (1/latency period)
 %Cite West Nile Virus Infection Decreases Fecundity of Culex tarsalis Females
-p(14) = 0.5;   %host-to-mosquito transmission
-p(13) = 0.3111312377;   %mosquito-to-host transmission
-p(15) = 0.01672790387;   %WNV-induced death rate. This is just an estimate. Cite Komar (see below).
-p(16) = 0.1121256665;   %host recovery rate (1/infection period), 
-               %Viremia was detectable for up to seven days post inoculation.
-               % Cite Komar,Experimental Infection of North American Birds with
-               % the New York 1999 Strain of West Nile Virus
+p(13) = 0.5;   %mosquito-to-host transmission
+p(14) = 0.3111312377;   %host-to-mosquito transmission
+p(15) = 0.01672790387;   %WNV-induced death rate.
+p(16) = 0.1121256665;   %host recovery parameter (1/infection period)*proportion recovered 
+           
 
 %There are several types of larvicide. Decay rates vary.
 %p(17)=rate at which larvicide decays
@@ -210,7 +208,7 @@ p(20)=-log(0.1)*p(18)*2;
 per_remain_one_hour=exp(p(20)*0.5*exp(-p(18)/24)/p(18)-p(20)*0.5/p(18));
 
 
-p(22)=.0015; % population density of avian species in a residential area
+% p(22)=.0015; % population density of avian species in a residential area
 
 %urban bird densities varied between 
 %281 birds / 10 ha = 281 birds / 100,000 m^2 = 0.0028 birds/m^2 and 
@@ -259,7 +257,7 @@ p(30) = 0.003952915781;
 p(31) = 0.001993512447;
 
 %Host-to-Host Contact Rate
-p(32) = 2.5768/7;
+p(32) = 2.5768/7; % Number in typical flock of those species that can transmit WNV horizontally/typical viremic period.
 %Host-to-Host Transmission Probability
 p(33) = 0.02960806276;
 

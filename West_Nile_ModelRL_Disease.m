@@ -32,14 +32,15 @@ m_l = p(7);             %larval maturation rate
 muL = p(8);           %larval death rate
 muV=p(9);             %adult death rate
 b = p(10);             %mosquito biting rate
-C = p(11);             %mosquito carrying capacity
+c_l = p(11);             %mosquito carrying capacity
 
 %Disease
-kl = p(12);           %disease progression (1/latency period)
-p_hm = p(13);     %host-to-mosquito transmission
-p_mh = p(14);     %mosquito-to-host transmission
-dh = p(15);           %induced host mortality
-g = p(16);            %host recovery rate
+kl = p(12);  %disease progression (1/latency period)
+p_mh = p(13); %mosquito-to-host transmission
+p_hm = p(14); %host-to-mosquito transmission
+
+gamma = p(15); % WNV- induced host mortality
+g = p(16); %host recovery rate
 
 gl=p(17);
 ga=p(18);
@@ -47,61 +48,54 @@ ga=p(18);
 km1=p(19);
 km2=p(20);
 
-
-cV=p(21);                   %weight of cost of vectors in objective functional
+cV=p(21); %weight of cost of vectors in objective functional
 
 Lambda = p(30); % Host recruitment rate
-gamma = p(31); % Host natural death rate
+mu_h = p(31); % Host natural death rate
 
-omega = p(32); % Host-Host contact rate
-p_hh = p(33); %Host-Host transmission probability
+p_hh = p(32); %Host-Host contact rate
+omega = p(33); % Host-Host transmission probability
 
-p(34) = c_h; % Host carrying capacity
+c_h = p(34); % Host carrying capacity
 
 d_l=((rs*m_l*qs/muV)-muL-m_l)/c_l; % density-dependent death rate for larvae
-d_h = (Lambda - gamma)/c_h; % density-dependent death rate for host
+d_h = (Lambda - mu_h)/c_h; % density-dependent death rate for host
 
     %State variables
 
     %Vector
-    Es = x(1);               %eggs laid by susceptible and exposed mothers
-    Ei = x(2);               %eggs laid by infected mothers
-    Ls = x(3);              %susceptible larvae
-    Li = x(4);              %infected larvae
-    Vs = x(5);              %susceptible vectors
-    Ve = x(6);              %exposed vectors
-    Vi = x(7);              %infected vectors
+    Es = x(1); %eggs laid by susceptible and exposed mothers
+    Ei = x(2); %eggs laid by infected mothers
+    Ls = x(3); %susceptible larvae
+    Li = x(4); %infected larvae
+    Vs = x(5); %susceptible vectors
+    Ve = x(6); %exposed vectors
+    Vi = x(7); %infected vectors
 
     %Host
-    Hs = x(8);              %susceptible hosts
-    Hi = x(9);              %infected hosts
-    Hr = x(10);              %recovered hosts
+    Hs = x(8); %susceptible hosts
+    Hi = x(9); %infected hosts
+    Hr = x(10); %recovered hosts
     
     %Control 
-    Ul = x(11);              %larvacide
-    Ua = x(12);             %adultacide
+    Ul = x(11); %larvacide
+    Ua = x(12); %adultacide
 
     NH = Hs+Hi+Hr;           %total hosts
-
     
-    %Vector ODEs
+   %Vector ODEs
     dEs=  rs*(Vs+Ve)-m_e*Es;
     dEi=  ri*(Vi)-m_e*Ei;
-    dLs = m_e*qs*Es+m_e*qi*(1-phi)*Ei-muL*Ls-m_l*Ls-d*Ls*(Ls+Li)-km1*Ls*Ul;
-    dLi = m_e*qi*phi*Ei-muL*Li-m_l*Li-d*Li*(Li+Ls)-km1*Li*Ul;
-    %dLs = (m_e*qs*Es+m_e*qi*(1-phi)*Ei-muL*Ls)*(1-(Ls+Li)/C)-(m_l*Ls)-km1*Ls*Ul;
-    %dLi = (m_e*qi*phi*Ei-muL*Li)*(1-(Ls+Li)/C)-m_l*Li-km1*Li*Ul;
+    dLs = m_e*qs*Es+m_e*qi*(1-phi)*Ei-muL*Ls-m_l*Ls-d_l*Ls*(Ls+Li)-km1*Ls*Ul;
+    dLi = m_e*qi*phi*Ei-muL*Li-m_l*Li-d_l*Li*(Li+Ls)-km1*Li*Ul;
     dVs = m_l*Ls-b*p_hm*Vs*Hi/NH-muV*Vs-km2*Vs*Ua;
     dVe = b*p_hm*Vs*Hi/NH-kl*Ve-muV*Ve-km2*Ve*Ua;
     dVi = m_l*Li+kl*Ve-muV*Vi-km2*Vi*Ua;
 
     %Host ODEs
-    dHs = Lambda*Hs - b*p_mh*Vi*Hs/NH - omega*p_hh*Hi*Hs/NH - d_h*NH*Hs - gamma*Hs; % Updated 07/19/2022
-%                        [V_i]*[prob of transmission]*[bites per unit time per mosquito]*[number of suceptibles]/[number of hosts]=
-%                           =transmission events per unit time.
-%                       Note the rate at which a host becomes infected increases with bite rate.
-    dHi = b*p_mh*Vi*Hs/NH + omega*p_hh*Hi*Hs/NH - (dh+g)*Hi - d_h*NH*Hi - gamma*Hi; % Updated 07/19/2022
-    dHr = g*Hi - d_h*NH*Hr - gamma*Hr; % Updated 07/19/2022 
+    dHs = Lambda*(Hs+Hr) - b*p_mh*Vi*Hs/NH - omega*p_hh*Hi*Hs/NH - d_h*NH*Hs - mu_h*Hs;                    
+    dHi = b*p_mh*Vi*Hs/NH + omega*p_hh*Hi*Hs/NH - gamma*Hi - g*Hi - d_h*NH*Hi - mu_h*Hi;
+    dHr = g*Hi - d_h*NH*Hr - mu_h*Hr;
     
     %Chemical ODEs
     dUl=-gl*Ul;
@@ -109,7 +103,6 @@ d_h = (Lambda - gamma)/c_h; % density-dependent death rate for host
     
     %Integral State ODE
     dx_int=(Vi+Hi);
-
 
 f=[dEs; dEi; dLs; dLi; dVs; dVe; dVi; dHs; dHi; dHr; dUl; dUa; dx_int];
 

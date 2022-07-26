@@ -19,28 +19,26 @@ x2=reshape(x2,length(x1),length(x1));
 %Model Parameters
 
 %Vector
-rs = p(1);            %intrinsic rate of increase of uninfected mosquitoes
-ri = p(2);           %intrinsic rate of increase of infected mosquitoes
-phi=p(3);               %fraction of eggs born to infected mothers that are infected
-qs=p(4);                %fraction of eggs from uninfected mosquitoes that hatch
-qi=p(5);                %fraction of eggs laid to infected mosquitoes that hatch
-m_e = p(6);              %egg maturatation rate
-m_l = p(7);             %larval maturation rate
+rs = p(1); %intrinsic rate of increase of uninfected mosquitoes
+ri = p(2); %intrinsic rate of increase of infected mosquitoes
+phi=p(3); %fraction of eggs born to infected mothers that are infected
+qs=p(4); %fraction of eggs from uninfected mosquitoes that hatch
+qi=p(5); %fraction of eggs laid to infected mosquitoes that hatch
+m_e = p(6); %egg maturatation rate
+m_l = p(7); %larval maturation rate
 
-muL = p(8);           %larval death rate
-muV=p(9);             %adult death rate
-b = p(10);             %mosquito biting rate
-c_l = p(11);             %mosquito carrying capacity
+muL = p(8); %larval death rate
+muV=p(9); %adult death rate
+b = p(10); %mosquito biting rate
+c_l = p(11); %mosquito carrying capacity
 
 %Disease
-kl = p(12);           %disease progression (1/latency period)
+kl = p(12);  %disease progression (1/latency period)
+p_mh = p(13); %mosquito-to-host transmission
+p_hm = p(14); %host-to-mosquito transmission
 
-p_hm = p(13);     %host-to-mosquito transmission
-p_mh = p(14);     %mosquito-to-host transmission
-omega = p(32);     % Host-to-host transmission rate
-
-dh = p(15);           %induced host mortality
-g = p(16);            %host recovery rate
+gamma = p(15); % WNV- induced host mortality
+g = p(16); %host recovery rate
 
 gl=p(17);
 ga=p(18);
@@ -48,19 +46,18 @@ ga=p(18);
 km1=p(19);
 km2=p(20);
 
-
-cV=p(21);                   %weight of cost of vectors in objective functional
+cV=p(21); %weight of cost of vectors in objective functional
 
 Lambda = p(30); % Host recruitment rate
-gamma = p(31); % Host natural death rate
+mu_h = p(31); % Host natural death rate
 
-omega = p(32); % Host-Host contact rate
-p_hh = p(33); %Host-Host transmission probability
+p_hh = p(32); %Host-Host contact rate
+omega = p(33); % Host-Host transmission probability
 
 c_h = p(34); % Host carrying capacity
 
 d_l=((rs*m_l*qs/muV)-muL-m_l)/c_l; % density-dependent death rate for larvae
-d_h = (Lambda - gamma)/c_h; % density-dependent death rate for host
+d_h = (Lambda - mu_h)/c_h; % density-dependent death rate for host
 
     %State variables
 
@@ -94,12 +91,9 @@ d_h = (Lambda - gamma)/c_h; % density-dependent death rate for host
     dVi = m_l*Li+kl*Ve-muV*Vi-km2*Vi*Ua;
 
     %Host ODEs
-    dHs = Lambda*(Hs+Hr) - b*p_mh*Vi*Hs/NH - omega*p_hh*Hi*Hs/NH - d_h*NH*Hs - gamma*Hs; % Updated 07/19/2022
-%                        [V_i]*[prob of transmission]*[bites per unit time per mosquito]*[number of suceptibles]/[number of hosts]=
-%                           =transmission events per unit time.
-%                       Note the rate at which a host becomes infected increases with bite rate.
-    dHi = b*p_mh*Vi*Hs/NH + omega*p_hh*Hi*Hs/NH - (dh+g)*Hi - d_h*NH*Hi - gamma*Hi; % Updated 07/19/2022
-    dHr = g*Hi - d_h*NH*Hr - gamma*Hr; % Updated 07/19/2022
+    dHs = Lambda*(Hs+Hr) - b*p_mh*Vi*Hs/NH - omega*p_hh*Hi*Hs/NH - d_h*NH*Hs - mu_h*Hs;                    
+    dHi = b*p_mh*Vi*Hs/NH + omega*p_hh*Hi*Hs/NH - gamma*Hi - g*Hi - d_h*NH*Hi - mu_h*Hi;
+    dHr = g*Hi - d_h*NH*Hr - mu_h*Hr;
     
     %Chemical ODEs
     dUl=-gl*Ul;
@@ -107,7 +101,6 @@ d_h = (Lambda - gamma)/c_h; % density-dependent death rate for host
     
     %Integral State ODE
     dx_int=cV*(Vi+Vs+Ve); 
-
 
 f=[dEs; dEi; dLs; dLi; dVs; dVe; dVi; dHs; dHi; dHr; dUl; dUa; dx_int];
 
@@ -120,9 +113,9 @@ dfdx=[ -m_e, 0, 0, 0, rs, rs, 0, 0, 0, 0, 0, 0, 0;
  0, 0, m_l, 0, -b*p_hm*Hi/NH-muV-km2*Ua, 0, 0, b*p_hm*Vs*Hi/(NH)^2, -b*p_hm*Vs/(NH)+b*p_hm*Vs*Hi/(NH)^2, b*p_hm*Vs*Hi/(NH)^2, 0, -km2*Vs, 0;
  0, 0, 0, 0, b*p_hm*Hi/NH, -kl-muV-km2*Ua, 0, -b*p_hm*Vs*Hi/(NH)^2, b*p_hm*Vs/(NH)-b*p_hm*Hi*Vs/(NH)^2, -b*p_hm*Vs*Hi/(NH)^2, 0, -km2*Ve, 0;
  0, 0, 0, m_l, 0, kl, -muV-km2*Ua, 0, 0, 0, 0, -km2*Vi, 0;
- 0, 0, 0, 0, 0, 0, -b*p_mh*Hs/NH, Lambda - gamma - Hs*d_h - d_h*(NH) - (Hi*omega*p_hh)/(NH) - (Vi*b*p_mh)/(NH) + (Hi*Hs*omega*p_hh)/(NH)^2 + (Hs*Vi*b*p_mh)/(NH)^2, (Hi*Hs*omega*p_hh)/(NH)^2 - (Hs*omega*p_hh)/(NH) - Hs*d_h + (Hs*Vi*b*p_mh)/(NH)^2, (Hi*Hs*omega*p_hh)/(NH)^2 - Hs*d_h + (Hs*Vi*b*p_mh)/(NH)^2, 0, 0, 0; % Hs updated 07-19-2022
- 0, 0, 0, 0, 0, 0, b*p_mh*Hs/NH, (Hi*omega*p_hh)/(NH) - d_h*(NH) - Hs*d_h + (Vi*b*p_mh)/(NH) - (Hi*Hs*omega*p_hh)/(NH)^2 - (Hs*Vi*b*p_mh)/(NH)^2, (Hs*omega*p_hh)/(NH) - g - gamma - Hs*d_h - dh - (Hi*Hs*omega*p_hh)/(NH)^2 - (Hs*Vi*b*p_mh)/(NH)^2, - Hs*d_h - (Hi*Hs*omega*p_hh)/(NH)^2 - (Hs*Vi*b*p_mh)/(NH)^2, 0, 0, 0; % Hi updated 07-19-2022
- 0, 0, 0,  0,  0,  0,  0,  - Hs*d_h - d_h*(NH),  g - Hs*d_h,  - gamma - Hs*d_h,  0,  0,  0; % Hr updated 07/19/2022.
+ 0, 0, 0, 0, 0, 0, -b*p_mh*Hs/NH, Lambda - mu_h - Hs*d_h - d_h*(NH) - (Hi*omega*p_hh)/(NH) - (Vi*b*p_mh)/(NH) + (Hi*Hs*omega*p_hh)/(NH)^2 + (Hs*Vi*b*p_mh)/(NH)^2, (Hi*Hs*omega*p_hh)/(NH)^2 - (Hs*omega*p_hh)/(NH) - Hs*d_h + (Hs*Vi*b*p_mh)/(NH)^2, (Hi*Hs*omega*p_hh)/(NH)^2 - Hs*d_h + (Hs*Vi*b*p_mh)/(NH)^2, 0, 0, 0; % Hs updated 07-19-2022
+ 0, 0, 0, 0, 0, 0, b*p_mh*Hs/NH, (Hi*omega*p_hh)/(NH) - d_h*(NH) - Hs*d_h + (Vi*b*p_mh)/(NH) - (Hi*Hs*omega*p_hh)/(NH)^2 - (Hs*Vi*b*p_mh)/(NH)^2, (Hs*omega*p_hh)/(NH) - g - mu_h - Hs*d_h - mu_h - (Hi*Hs*omega*p_hh)/(NH)^2 - (Hs*Vi*b*p_mh)/(NH)^2, - Hs*d_h - (Hi*Hs*omega*p_hh)/(NH)^2 - (Hs*Vi*b*p_mh)/(NH)^2, 0, 0, 0; % Hi updated 07-19-2022
+ 0, 0, 0,  0,  0,  0,  0,  - Hs*d_h - d_h*(NH),  g - Hs*d_h,  - mu_h - Hs*d_h,  0,  0,  0; % Hr updated 07/19/2022.
  0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  -gl, 0, 0;
  0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  0,  -ga,  0; 
  0, 0, 0,  0,  cV,  cV,  cV,  0,  0,  0,  0,  0,  0];
