@@ -142,46 +142,126 @@ d_h3 = (Lambda3 - mu_h3)/c_h3; % density-dependent death rate for host group 3
 %%% New Code: 
 
 % For Mosquito:Bird Ratios > 1:
-for n = 1:50
-    c_l(n) = n*0.001;
-    d_l(n)=((rs*m_l*qs/muV)-muL-m_l)/c_l(n); % density-dependent death rate for larvae
-    ratio(n) = c_l(n)/c_h1;
+
+c_l = 0.001
+
+for n = 1:250
+    t(n) = n;
+    c_l = c_l + 0.0001;
+    c_l_save(n) = c_l;
+    d_l(n)=((rs*m_l*qs/muV)-muL-m_l)/c_l_save(n); % density-dependent death rate for larvae
+    ratio(n) = c_l_save(n)/c_h1;
 
     j1(n) = omega1*p_hh1;
-    j2(n) = (b*c_l(n)*m_l*p_hm1)/(c_h1*muV);
+    j2(n) = (b*c_l_save(n)*m_l*p_hm1)/(c_h1*muV);
     j3(n) = b*p_mh;
     j4(n) = ri;
 
     n1(n) = (-d_h1*c_h1)-g1-gamma1-mu_h1;
     n2(n) = -m_e;
     n3(n) = m_e*phi*qi;
-    n4(n) = (-d_l(n)*c_l(n))-m_l-muL;
+    n4(n) = (-d_l(n)*c_l_save(n))-m_l-muL;
     n5(n) = m_l;
     n6(n) = -kl-muV;
     n7(n) = kl;
     n8(n) = -muV;
 
-    sol1=double(subs(eigen_values(1)));
+    sol1=double(subs(eigen_values(1)))
     sol2=double(subs(eigen_values(2)));
     sol3=double(subs(eigen_values(3)));
-    sol4=double(subs(eigen_values(4)));
+    sol4=double(subs(eigen_values(4)))
     sol5=double(subs(eigen_values(5)));
 
     sol=[sol1 sol2 sol3 sol4 sol5];
-    [subR0,max_index]=max(sol);
 
-    subR0_save(n) = subR0;
+    sol1_save(n) = sol(1);
+    sol2_save(n) = sol(2);
+    sol3_save(n) = sol(3);
+    sol4_save(n) = sol(4);
+    sol5_save(n) = sol(5);
+
+%     [subR0,max_index]=max(sol);
+%     subR0_save(n) = subR0;
 
 end;
 
+% Graph of R0 vs. Density Ratio
+
+% figure
+% plot(ratio,subR0_save, 'Linewidth', 3)
+% xlabel('Mosquito:Bird Ratio', 'FontSize', 12);
+% ylabel('R0', 'FontSize', 12);
+% title('R0 as a Function of Mosquito:Bird Density for Host Group 1')
+% hold on
+% 
+% file_name=sprintf('R0_WNV_Host_1_Vector_Density_Ratio_Above_1.eps');
+% exportgraphics(gcf,file_name);
+
+% Graph of All Eigenvalues vs. Density Ratio
+
 figure
-plot(ratio,subR0_save, 'Linewidth', 3)
+plot(ratio,sol1_save,'Linewidth',3)
+hold on
+plot(ratio,sol2_save,'Linewidth',3)
+hold on
+plot(ratio,sol3_save,'Linewidth',3)
+hold on
+plot(ratio,sol4_save,'Linewidth',3)
+hold on
+plot(ratio,sol5_save,'Linewidth',3)
+hold on
+legend('sol1', 'sol2', 'sol3', 'sol4', 'sol5', 'FontSize', 12);
 xlabel('Mosquito:Bird Ratio', 'FontSize', 12);
 ylabel('R0', 'FontSize', 12);
-title('R0 as a Function of Mosquito:Bird Density for Host Group 1')
-hold on
+title('Eigenvalues as a Function of Mosquito:Bird Density for Host Group 1')
+hold off
 
-file_name=sprintf('R0_WNV_Host_1_Vector_Density_Ratio_Above_1.eps');
-exportgraphics(gcf,file_name);
+% file_name=sprintf('Host1_Eigenvalues_Density_Ratio.eps');
+% exportgraphics(gcf,file_name);
+
+% %%% New Code: 
+% 
+% % Graphing all 
+% for n = 1:50
+%     c_l(n) = n*0.001;
+%     d_l(n)=((rs*m_l*qs/muV)-muL-m_l)/c_l(n); % density-dependent death rate for larvae
+%     ratio(n) = c_l(n)/c_h1;
+% 
+%     j1(n) = omega1*p_hh1;
+%     j2(n) = (b*c_l(n)*m_l*p_hm1)/(c_h1*muV);
+%     j3(n) = b*p_mh;
+%     j4(n) = ri;
+% 
+%     n1(n) = (-d_h1*c_h1)-g1-gamma1-mu_h1;
+%     n2(n) = -m_e;
+%     n3(n) = m_e*phi*qi;
+%     n4(n) = (-d_l(n)*c_l(n))-m_l-muL;
+%     n5(n) = m_l;
+%     n6(n) = -kl-muV;
+%     n7(n) = kl;
+%     n8(n) = -muV;
+% 
+%     sol1=double(subs(eigen_values(1)));
+%     sol2=double(subs(eigen_values(2)));
+%     sol3=double(subs(eigen_values(3)));
+%     sol4=double(subs(eigen_values(4)));
+%     sol5=double(subs(eigen_values(5)));
+% 
+%     sol=[sol1 sol2 sol3 sol4 sol5];
+%     [subR0,max_index]=max(sol);
+% 
+%     subR0_save(n) = subR0;
+% 
+% end;
+% 
+% figure
+% plot(ratio,subR0_save, 'Linewidth', 3)
+% xlabel('Mosquito:Bird Ratio', 'FontSize', 12);
+% ylabel('R0', 'FontSize', 12);
+% title('R0 as a Function of Mosquito:Bird Density for Host Group 1')
+% hold on
+% 
+% file_name=sprintf('R0_WNV_Host_1_Vector_Density_Ratio_Above_1.eps');
+% exportgraphics(gcf,file_name);
 
 toc;

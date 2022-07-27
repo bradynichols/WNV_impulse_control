@@ -65,19 +65,17 @@ p(16) = 0.4066812182; % host-to-mosquito transmission host group 3
 
 p(17) = 0; % direct transmission host group 1
 p(18) = 0; % direct transmission host group 2
-% p(19) = 0.1590100415; % direct transmission host group 3
-p(19) = 0; % Test for R0 without direct transmission.
+p(19) = 0.1590100415; % direct transmission host group 3
 
 p(20) = 0; % contact rate host group 1
 p(21) = 0; % contact rate host group 2
-% p(22) = 9.202857143/7; % contact rate host group 3
-p(22) = 0; % Test for R0 without contact rates.
+p(22) = 9.202857143/7; % contact rate host group 3
 
 p(23) = 0.1429; % WNV recovery host group 1
 p(24) = 0.1018258535; % WNV recovery host group 2
 p(25) = 0.0602776217; % WNV recovery host group 3
 
-p(26) = 0; % WNV death host group 1 - DONE
+p(26) = 0; % WNV death host group 1
 p(27) = 0.03519053473; % WNV death host group 2
 p(28) = 0.09875217396; % WNV death host group 3
 
