@@ -24,11 +24,9 @@ Es = c_l*m_l*rs/(muV*m_e);
 %%%%% F=new infections, V=transfer between compartments 
 %%%% Only need to focus on infection compartments: [Hi1 Hi2 Hi3 Ei Li Ve Vi]
 
-% Ffun=[p_mh*b*Vi+p_hh1*omega1*Hi1, p_mh*b*Vi+p_hh2*omega2*Hi2, p_mh*b*Vi+p_hh3*omega3*Hi3, ri*Vi, 0, b*p_hm1*Vs*Hi1/c_h1+b*p_hm2*Vs*Hi2/c_h2+b*p_hm3*Vs*Hi3/c_h3, 0];
-
 Ffun=[p_mh*b*Vi+p_hh1*omega1*Hi1, ri*Vi, 0, b*p_hm1*Vs*Hi1/c_h1, 0]
 
-Vfun=[-gamma1*Hi1-g1*Hi1-d_h1*Hs3*Hi1-mu_h1*Hi1, -m_e*Ei, m_e*qi*phi*Ei-muL*Li-m_l*Li-d_l*Ls*Li, -kl*Ve-muV*Ve, m_l*Li+kl*Ve-muV*Vi]
+Vfun=[-gamma1*Hi1-g1*Hi1-d_h1*Hs1*Hi1-mu_h1*Hi1, -m_e*Ei, m_e*qi*phi*Ei-muL*Li-m_l*Li-d_l*Ls*Li, -kl*Ve-muV*Ve, m_l*Li+kl*Ve-muV*Vi]
 
 %%%% Compute the jacobian with respect to infection compartments: [Hi1 Ei Li Ve Vi]
 
@@ -140,19 +138,19 @@ d_h1 = (Lambda1 - mu_h1)/c_h1; % density-dependent death rate for host group 1
 d_h2 = (Lambda2 - mu_h2)/c_h2; % density-dependent death rate for host group 2
 d_h3 = (Lambda3 - mu_h3)/c_h3; % density-dependent death rate for host group 3
 
-j1 = omega1*p_hh1
-j2 = (b*c_l*m_l*p_hm1)/(c_h1*muV)
-j3 = b*p_mh
-j4 = ri
+j1 = omega1*p_hh1;
+j2 = (b*c_l*m_l*p_hm1)/(c_h1*muV);
+j3 = b*p_mh;
+j4 = ri;
 
-n1 = (-d_h1*c_h3)-g1-gamma1-mu_h1
-n2 = -m_e
-n3 = m_e*phi*qi
-n4 = (-d_l*c_l)-m_l-muL
-n5 = m_l
-n6 = -kl-muV
-n7 = kl
-n8 = -muV
+n1 = (-d_h1*c_h1)-g1-gamma1-mu_h1;
+n2 = -m_e;
+n3 = m_e*phi*qi;
+n4 = (-d_l*c_l)-m_l-muL;
+n5 = m_l;
+n6 = -kl-muV;
+n7 = kl;
+n8 = -muV;
 
 %eivenvalues are copied from  eig=solve(p, lambda)
 sol1=double(subs(eigen_values(1)));
@@ -164,7 +162,8 @@ sol5=double(subs(eigen_values(5)));
 sol=[sol1 sol2 sol3 sol4 sol5]
 
 % %%%% largest eigenvalue is R0
+
 [subR0,max_index]=max(sol)
-R0=eigen_values(max_index)
+% R0=eigen_values(max_index)
 
 toc;

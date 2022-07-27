@@ -134,44 +134,63 @@ ga = p(41); % adulticide decay rate
 
 cV = p(42); % weight of cost of vectors in objective functional
 
-d_l=((rs*m_l*qs/muV)-muL-m_l)/c_l; % density-dependent death rate for larvae
-d_h1 = (Lambda1 - mu_h1)/c_h1; % density-dependent death rate for host group 1
-d_h2 = (Lambda2 - mu_h2)/c_h2; % density-dependent death rate for host group 2
-d_h3 = (Lambda3 - mu_h3)/c_h3; % density-dependent death rate for host group 3
+%%% New Code: 
 
-n1 = ((-d_h1*c_h1)-g1-gamma1-mu_h1);
-n2 = ((-d_h2*c_h2)-g2-gamma2-mu_h2);
-n3 = ((-d_h3*c_h3)-g3-gamma3-mu_h3);
-n4 = -m_e;
-n5 = m_e*phi*qi;
-n6 = (-d_l*c_l)-m_l-muL;
-n7 = m_l;
-n8 = -kl-muV;
-n9 = kl;
-n10 = -muV;
+% For Mosquito:Bird Ratios > 1:
+for n = 1:50
+    t(n) = n
+    c_l(n) = n*0.001;
+    d_l(n) = ((rs*m_l*qs/muV)-muL-m_l)/c_l(n); % density-dependent death rate for larvae
+    d_h1(n) = (Lambda1 - mu_h1)/c_h1; % density-dependent death rate for host group 1
+    d_h2(n) = (Lambda2 - mu_h2)/c_h2; % density-dependent death rate for host group 2
+    d_h3(n) = (Lambda3 - mu_h3)/c_h3; % density-dependent death rate for host group 3
+    ratio(n) = c_l(n)/(c_h1 + c_h2+ c_h3);
 
-j1 = omega1*p_hh1;
-j2 = omega2*p_hh2;
-j3 = omega3*p_hh3;
-j4 = (b*c_l*m_l*p_hm1)/(c_h1*muV);
-j5 = (b*c_l*m_l*p_hm2)/(c_h2*muV);
-j6 = (b*c_l*m_l*p_hm3)/(c_h3*muV);
-j7 = b*p_mh;
-j8 = ri;
+    n1(n) = ((-d_h1(n)*c_h1)-g1-gamma1-mu_h1);
+    n2(n) = ((-d_h2(n)*c_h2)-g2-gamma2-mu_h2);
+    n3(n) = ((-d_h3(n)*c_h3)-g3-gamma3-mu_h3);
+    n4(n) = -m_e;
+    n5(n) = m_e*phi*qi;
+    n6(n) = (-d_l(n)*c_l(n))-m_l-muL;
+    n7(n) = m_l;
+    n8(n) = -kl-muV;
+    n9(n) = kl;
+    n10(n) = -muV;
 
-%eivenvalues are copied from  eig=solve(p, lambda)
-sol1=double(subs(eigen_values(1)));
-sol2=double(subs(eigen_values(2)));
-sol3=double(subs(eigen_values(3)));
-sol4=double(subs(eigen_values(4)));
-sol5=double(subs(eigen_values(5)));
-sol6=double(subs(eigen_values(6)));
-sol7=double(subs(eigen_values(7)));
+    j1(n) = omega1*p_hh1;
+    j2(n) = omega2*p_hh2;
+    j3(n) = omega3*p_hh3;
+    j4(n) = (b*c_l(n)*m_l*p_hm1)/(c_h1*muV);
+    j5(n) = (b*c_l(n)*m_l*p_hm2)/(c_h2*muV);
+    j6(n) = (b*c_l(n)*m_l*p_hm3)/(c_h3*muV);
+    j7(n) = b*p_mh;
+    j8(n) = ri;
 
-sol=[sol1 sol2 sol3 sol4 sol5 sol6 sol7]
+    %eivenvalues are copied from  eig=solve(p, lambda)
+    sol1=double(subs(eigen_values(1)));
+    sol2=double(subs(eigen_values(2)));
+    sol3=double(subs(eigen_values(3)));
+    sol4=double(subs(eigen_values(4)));
+    sol5=double(subs(eigen_values(5)));
+    sol6=double(subs(eigen_values(6)));
+    sol7=double(subs(eigen_values(7)));
 
-% %%%% largest eigenvalue is R0
-[subR0,max_index]=max(sol)
-% R0=eigen_values(max_index)
+    sol=[sol1 sol2 sol3 sol4 sol5 sol6 sol7];
+
+    % %%%% largest eigenvalue is R0
+    [subR0,max_index]=max(sol);
+    subR0_save(n) = subR0;
+
+end;
+
+figure
+plot(ratio,subR0_save, 'Linewidth', 3)
+xlabel('Mosquito:Bird Ratio', 'FontSize', 12);
+ylabel('R0', 'FontSize', 12);
+title('R0 as a Function of Mosquito:Bird Density for Multiple Compartment Model')
+hold on
+
+file_name=sprintf('R0_WNV_Multi_Compartment_Vector_Density_Ratio_Above_1.eps');
+exportgraphics(gcf,file_name);
 
 toc;
