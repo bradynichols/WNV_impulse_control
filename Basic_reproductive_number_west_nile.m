@@ -12,8 +12,12 @@ syms rs ri phi qs qi m_e m_l mu_h muL muV b c_l kl p_hm p_mh d_h g gl ga km1 km2
 %%%Compute Jacobian
 %%%%%F=new infections, V=transfer between compartments
 %%%%Only need to focus on infection compartments: [Hi Ei Li Ve Vi]
+
+Hs = c_h;
+Ls = c_l;
+
 Ffun=[p_mh*b*Vi+omega*p_hh*Hi, ri*Vi, 0, b*p_hm*m_l*Hi*c_l/(c_h*muV), 0]; 
-Vfun=[-gamma*Hi-g*Hi-d_h*Hi-mu_h*Hi, -m_e*Ei, m_e*qi*phi*Ei-muL*Li-m_l*Li-d_l*Li, -kl*Ve-muV*Ve, m_l*Li+kl*Ve-muV*Vi]; 
+Vfun=[-gamma*Hi-g*Hi-d_h*Hi*Hs-mu_h*Hi, -m_e*Ei, m_e*qi*phi*Ei-muL*Li-m_l*Li-d_l*Li*Ls, -kl*Ve-muV*Ve, m_l*Li+kl*Ve-muV*Vi]; 
 %%%%Compute the jacobian with respect to infection compartments: [Hi Ei Li Ve Vi]
 FF=jacobian(Ffun, [Hi Ei Li Ve Vi]);
 VV=jacobian(Vfun, [Hi Ei Li Ve Vi]);
@@ -22,6 +26,8 @@ VV
 %%%Find matrix F and V
 %%%%Evaluate FF and VV at disease free equilibrium
 %%%%Only need to set infection compartments [I, As, Is, F, X, Ms, V] as zeros
+
+
 MatrixF=subs(FF, [Hi Ei Li Ve Vi], [0, 0, 0, 0, 0])
 MatrixV=subs(VV, [Hi Ei Li Ve Vi], [0, 0, 0, 0, 0])
 %%%%%Compute F*V^{-1}
