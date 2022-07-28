@@ -1,4 +1,4 @@
-function [] = West_Nile_Model_plots(tt,x,control_type,Obj_type,N,Tf,J,J_comp,larvicide_type)
+function [] = ES_SC_Plots(tt,x,control_type,Obj_type,N,Tf,J,J_comp,larvicide_type)
 
 hold off
 figure

@@ -82,7 +82,7 @@ for i=1:N
 end
 %control with optimal schedule
 control_type=2;
-West_Nile_Model_plots(t,x,control_type,Obj_type,N,Tf,J,J_comp, larvicide_type)
+ES_SC_Plots(t,x,control_type,Obj_type,N,Tf,J,J_comp, larvicide_type)
 end
 
 

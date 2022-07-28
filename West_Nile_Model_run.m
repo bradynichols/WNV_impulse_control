@@ -78,5 +78,5 @@ f=@(t,x)ES_SC_Model_Definition(t,x,p);
 %solve the state equations
 [tt,x]=ode23(f,[0,Tf],X0);
 
-West_Nile_Model_plots(tt,x,0,[],[],Tf,[],[],larvicide_type);
+ES_SC_Plots(tt,x,0,[],[],Tf,[],[],larvicide_type);
 end

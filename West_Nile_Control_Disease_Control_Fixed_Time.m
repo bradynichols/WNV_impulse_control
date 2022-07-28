@@ -277,6 +277,6 @@ end
 control_type=1;
 Obj_type=2;
 
-West_Nile_Model_plots(t,x,control_type,Obj_type,N,Tf,J,J_comp)
+ES_SC_Plots(t,x,control_type,Obj_type,N,Tf,J,J_comp)
     
 end
