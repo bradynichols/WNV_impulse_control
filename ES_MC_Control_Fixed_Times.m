@@ -1,12 +1,10 @@
-function [tau,ul,ua,X,J,J_comp,final_treatment_time,X0,T] = West_Nile_Control_Disease_Control_Fixed_Time(N,Tf,larvicide_type)
+function [tau,ul,ua,X,J,J_comp,final_treatment_time,X0,T] = ES_MC_Control_Fixed_Times(N,Tf,larvicide_type)
 %This code optimizes the control level
-%in order to minimize the disease burden plus control cost.
+%in order to minimize the density of vectors plus control cost.
 %larvicide_type: 1=long-lasting s-methorpene briquet, 2=VectoBac
 %N is the maximal number of treatments
 %Tf is the duration of the control
-%Initial conditions are set on line 93 as the disease-free equilibrium plus  
-%a low density of infectious mosquitoes.
-
+%Initial conditions are set on line 88 as the disease-free equilibrium. 
 %State variables
 
 %Vector
@@ -28,7 +26,7 @@ function [tau,ul,ua,X,J,J_comp,final_treatment_time,X0,T] = West_Nile_Control_Di
 %Ua = x(12);             %adultacide
 
 %Artifical State
-%int_0^t{cV*(Vi(s)+Hi(s))}ds=x(13)
+%int_0^t{cV*(Vi(s)+Vs(s)+Ve(s)}ds=x(13)
 
 %NH = Hs+Hi+Hr;           %total hosts
 
@@ -42,9 +40,9 @@ function [tau,ul,ua,X,J,J_comp,final_treatment_time,X0,T] = West_Nile_Control_Di
 %[Es,Ei,Ls,Li,Vs,Ve,Vi,Hs,Hi,Hr,Ul,Ua,Int] post treatment.
 %The discrete state is denoted by X(i,:)=[X(i,1), . . ., X(i,13)]
 
-%J_comp=cv*X(13,N)+ce*(X(2,N))+cl*sum(ul.^2)+ca*sum(ua.^2)
+%J_comp=X(13,N)+ce*(X(1,N)+X(2,N))+cl*sum(ul.^2)+ca*sum(ua.^2)
 %where X(13,N) is the value of the artifical state at the final time and 
-% X(2,N) gives the density of infectious-laid eggs at the final time. 
+% X(1,N)+X(2,N) gives the density of eggs at the final time. 
 
 
 %The Hamiltonian is -J+sum_{i=1}^{N}{<Y(i),(G(X(i-1),ul(i),ua(i))-X(i))>} + <Y(0),X0-X(0)>
@@ -71,7 +69,9 @@ delta=10^(-8);
 
 %Model Parameters
 %generate parameters
-p = System_parametersRL(larvicide_type, Tf);
+p = ES_MC_Parameters(larvicide_type, Tf);
+
+NH=p(22);
 
 %Vector
 rs = p(1);            %intrinsic rate of increase of uninfected mosquitoes
@@ -84,14 +84,8 @@ C = p(11);             %mosquito carrying capacity
 ic_V=m_l*C/muV;
 ic_E=rs*m_l*C/(m_e*muV);
 
-NH=p(22);
-
 % Initial conditions for discrete/continuous state variables
-%disease free steady 
-%ic = [ic_E;0;C;0;ic_V;0;0;1;0;0;0;0;0;0];
-%start with a low density of infectious mosquitoes. 
-ic = [ic_E;0;C;0;ic_V;0;.01*ic_V;NH;0;0;0;0;0];
-
+ic = [ic_E;0;C;0;ic_V;0;0;NH;0;0;0;0;0];
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Duration of treatment
@@ -101,16 +95,13 @@ cl = p(23);
 %weight of cost of adulticide
 ca = p(24); %adulticide treatment is more expensive. Cite Mosquitoes and disease Illinois dept of public health
 cT=p(25);
-%cost of eggs at the final time
+%weight of cost of eggs at the final time
 ce=p(26);
-
-cv=p(21);
 
 %maximum time between controls
 Maxt=p(28);
 %minimum time between controls
 mint=p(29);
-
 
 %state variables with underlying continuous dynamics
 X01=ic(1:13);
@@ -120,8 +111,8 @@ X02=reshape(eye(length(X01)),length(X01)^2,1);
 X0=[X01; X02];
 
 
-%equally-spaced waiting times with first treatment at t=0 and last
-%treatment at t=T_f
+%equally-spaced waiting times with first control at t=0 and final control
+%at t=Tf.
 tau=(Tf/(N-1))*ones(N,1);
 tau(1)=0;
 
@@ -141,7 +132,7 @@ DX=zeros(length(X01),length(X01),N);
 Y=zeros(N,length(ic));
 
 
-f=@(t,x)West_Nile_ModelRL_Disease(t,x,p);
+f=@(t,x)ES_MC_Model_Definition(t,x,p);
 
 J_values=[];
 
@@ -155,6 +146,8 @@ while (test<0)
     
 %This loop finds the discrete states just before (XX) and just after (X) each treatment
 for i=1:N
+    %since the first treatment happens at time 0, only the larvicide and
+    %adulticide levels change
         if i==1
             x0=X0;
             x=X0;
@@ -187,6 +180,7 @@ for i=1:N
             X(11,i)=X(11,i)+ul(i);
             X(12,i)=X(12,i)+ua(i);
         end   
+
     DX(:,:,i)=reshape(x(length(X01)+1:length(X01)^2+length(X01)),length(X01),length(X01));
     %DX=[dx1/dx1(0), dx1/dx2(0),. . .dx1/dx13(0);
        % dx2/dx1(0), dx2/dx2(0), . . .dx2/dx13(0);
@@ -197,7 +191,7 @@ for i=1:N
 end
 
 %get the adjoint variables at steps 1,. . .,N.
-Y(N,:)= [0 -ce 0 0 0 0 0 0 0 0 0 0 -cv];
+Y(N,:)= [-ce -ce 0 0 0 0 0 0 0 0 0 0 -1];
 for i=1:N-1
     j=N-i;
     Y(j,1:length(X01))=Y(j+1,1:length(X01))*DX(:,:,j);
@@ -213,14 +207,14 @@ for i=1:N
     
 end
     
-    J=cv*X(13,N)+ce*(X(2,N))+cl*sum(oldul.^2)+ca*sum(oldua.^2);
+    J=X(13,N)+ce*(X(1,N)+X(2,N))+cl*sum(oldul.^2)+ca*sum(oldua.^2);
     J_values=[J_values J];
-
+    
     %evaluate total relative error
     testua=delta*sum(abs(ua))-sum(abs(ua-oldua));
     testul=delta*sum(abs(ul))-sum(abs(ul-oldul));
     testX=delta*sum(abs(X(1:13,:)))-sum(abs(X(1:13,:)-oldX(1:13,:)));
-    
+
     %update control
     ul=(.9*oldul+.1*ul);
     ua=(.9*oldua+.1*ua);
@@ -231,7 +225,7 @@ end
     final_treatment_time=sum(tau);
 end
 
-J_comp=cv*X(13,N)+ce*(X(2,N))+cl*sum(oldul.^2)+ca*sum(oldua.^2)+cT*sum(tau.^2);
+J_comp=X(13,N)+ce*(X(1,N)+X(2,N))+cl*sum(oldul.^2)+ca*sum(oldua.^2)+cT*sum(tau.^2);
 
 M=length(J_values);
 figure
@@ -273,10 +267,16 @@ for i=1:N
     end
     
 end
-
 control_type=1;
-Obj_type=2;
+Obj_type=1;
 
-West_Nile_Model_plots(t,x,control_type,Obj_type,N,Tf,J,J_comp)
+ES_MC_Plots(t,x,control_type,Obj_type,N,Tf,J,J_comp)
     
 end
+         
+
+
+    
+    
+
+

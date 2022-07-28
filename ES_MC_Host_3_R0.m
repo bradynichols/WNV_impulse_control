@@ -66,7 +66,7 @@ end
 
 %%% set values for parameters. Note the argument is for plotting decay in
 %%% larvicidal effect and does not impact this computation.
-p = System_parametersRL(1,90); % Not quite sure why this goes to 90. 
+p = ES_MC_Parameters(1,90); % Not quite sure why this goes to 90. 
 
 % Model Parameters
 
@@ -118,9 +118,12 @@ mu_h1 = p(32); % natural death rate host group 1
 mu_h2 = p(33); % natural death rate host group 2
 mu_h3 = p(34); % natural death rate host group 3
 
-c_h1 = p(35); % carrying capacity host group 1
-c_h2 = p(36); % carrying capacity host group 2
-c_h3 = p(37); % carrying capacity host group 3
+% c_h1 = p(35); % carrying capacity host group 1
+% c_h2 = p(36); % carrying capacity host group 2
+% c_h3 = p(37); % carrying capacity host group 3
+c_h1 = 0.0005
+c_h2 = 0.0005
+c_h3 = 0.0005
 
 km1 = p(38); % max rate at which larvicide kills larvae
 km2 = p(40); % max rate at which adulticide kills adult vectors
@@ -135,136 +138,31 @@ d_h1 = (Lambda1 - mu_h1)/c_h1; % density-dependent death rate for host group 1
 d_h2 = (Lambda2 - mu_h2)/c_h2; % density-dependent death rate for host group 2
 d_h3 = (Lambda3 - mu_h3)/c_h3; % density-dependent death rate for host group 3
 
-%%% New Code: 
+j1 = omega3*p_hh3
+j2 = (b*c_l*m_l*p_hm3)/(c_h3*muV)
+j3 = b*p_mh
+j4 = ri
 
-% For Mosquito:Bird Ratios > 1:
+n1 = (-d_h3*c_h3)-g3-gamma3-mu_h3
+n2 = -m_e
+n3 = m_e*phi*qi
+n4 = (-d_l*c_l)-m_l-muL
+n5 = m_l
+n6 = -kl-muV
+n7 = kl
+n8 = -muV
 
-c_l = 0.0001
+%eivenvalues are copied from  eig=solve(p, lambda)
+sol1=double(subs(eigen_values(1)));
+sol2=double(subs(eigen_values(2)));
+sol3=double(subs(eigen_values(3)));
+sol4=double(subs(eigen_values(4)));
+sol5=double(subs(eigen_values(5)));
 
-for n = 1:300
-    t(n) = n
-    c_l = c_l + 0.00005;
-    c_l_save(n) = c_l;
-    d_l(n)=((rs*m_l*qs/muV)-muL-m_l)/c_l_save(n); % density-dependent death rate for larvae
-    ratio(n) = c_l_save(n)/c_h3;
+sol=[sol1 sol2 sol3 sol4 sol5] 
 
-    j1(n) = omega3*p_hh3;
-    j2(n) = (b*c_l_save(n)*m_l*p_hm3)/(c_h3*muV);
-    j3(n) = b*p_mh;
-    j4(n) = ri;
-
-    n1(n) = (-d_h1*c_h3)-g3-gamma3-mu_h3;
-    n2(n) = -m_e;
-    n3(n) = m_e*phi*qi;
-    n4(n) = (-d_l(n)*c_l_save(n))-m_l-muL;
-    n5(n) = m_l;
-    n6(n) = -kl-muV;
-    n7(n) = kl;
-    n8(n) = -muV;
-
-    sol1=double(subs(eigen_values(1)));
-    sol2=double(subs(eigen_values(2)));
-    sol3=double(subs(eigen_values(3)));
-    sol4=double(subs(eigen_values(4)));
-    sol5=double(subs(eigen_values(5)));
-
-    sol=[sol1 sol2 sol3 sol4 sol5];
-
-    [sol1R0] = sol(1)
-    [sol2R0] = sol(2)
-    [sol3R0] = sol(3)
-    [sol4R0] = sol(4)
-    [sol5R0] = sol(5)
-
-    [subR0,max_index]=max(sol);
-    subR0_save(n) = subR0;
-
-    sol1_save(n) = sol1R0;
-    sol2_save(n) = sol2R0;
-    sol3_save(n) = sol3R0;
-    sol4_save(n) = sol4R0;
-    sol5_save(n) = sol5R0;
-
-end;
-
-% Graph of R0 vs. Density Ratio
-
-figure
-plot(ratio,subR0_save, '*')
-hold on
-plot(ratio, sol1_save, '*')
-hold on
-plot(ratio, sol2_save, '*')
-hold on
-plot(ratio, sol3_save, '*')
-hold on
-plot(ratio, sol4_save, '*')
-hold on
-plot(ratio, sol5_save, '*')
-hold on
-legend('subR0', 'sol1', 'sol2', 'sol3', 'sol4', 'sol5', 'FontSize', 12);
-xlabel('Mosquito:Bird Ratio', 'FontSize', 12);
-ylabel('R0', 'FontSize', 12);
-title('R0 as a Function of Mosquito:Bird Density for Host Group 3')
-hold on
-
-file_name=sprintf('R0_WNV_Host_3_Vector_Density_Ratio_Above_1.eps');
-exportgraphics(gcf,file_name);
-
-% Changing mosquito and bird densities, but keeping the ratio between them the same:
-
-c_l = 0.001
-c_h3 = 0.00005
-
-for n = 1:200
-
-    t(n) = n
-    c_l = c_l*2;
-    c_l_save(n) = c_l;
-    c_h3 = c_h3*2;
-    c_h3_save(n) = c_h3;
-
-    d_l(n)=((rs*m_l*qs/muV)-muL-m_l)/c_l_save(n); % density-dependent death rate for larvae
-    d_h3(n) = (Lambda3 - mu_h3)/c_h3_save(n); % density-dependent death rate for host group 3
-    ratio(n) = c_l_save(n)/c_h3_save(n);
-
-    j1(n) = omega3*p_hh3;
-    j2(n) = (b*c_l_save(n)*m_l*p_hm3)/(c_h3_save(n)*muV);
-    j3(n) = b*p_mh;
-    j4(n) = ri;
-
-    n1(n) = (-d_h3(n)*c_h3_save(n))-g3-gamma3-mu_h3;
-    n2(n) = -m_e;
-    n3(n) = m_e*phi*qi;
-    n4(n) = (-d_l(n)*c_l_save(n))-m_l-muL;
-    n5(n) = m_l;
-    n6(n) = -kl-muV;
-    n7(n) = kl;
-    n8(n) = -muV;
-
-    sol1=double(subs(eigen_values(1)));
-    sol2=double(subs(eigen_values(2)));
-    sol3=double(subs(eigen_values(3)));
-    sol4=double(subs(eigen_values(4)));
-    sol5=double(subs(eigen_values(5)));
-
-    sol=[sol1 sol2 sol3 sol4 sol5];
-
-    [subR0,max_index]=max(sol);
-    subR0_save(n) = subR0;
-
-end;
-
-
-figure
-plot(c_l_save,subR0_save, 'Linewidth', 3)
-hold on
-xlabel('Mosquito Density (Constant Density Ratio)', 'FontSize', 12);
-ylabel('R0', 'FontSize', 12);
-title('R0 at Constant Vector:Host Density Ratio')
-hold on
-
-file_name=sprintf('Host3_Constant_Density_Ratio.eps');
-exportgraphics(gcf,file_name);
+% %%%% largest eigenvalue is R0
+[subR0,max_index]=max(sol)
+R0=eigen_values(max_index)
 
 toc;

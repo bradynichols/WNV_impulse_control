@@ -1,4 +1,4 @@
-function [p] = System_parametersRL(larvicide_type, Tf)
+function [p] = ES_MC_Parameters(larvicide_type, Tf)
 
 % Parameter values for simulations:
 p = zeros(1,49);

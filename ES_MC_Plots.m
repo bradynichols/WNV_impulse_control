@@ -1,4 +1,4 @@
-function [] = West_Nile_Model_plots(tt,x,control_type,Obj_type,N,Tf,J,J_comp,larvicide_type)
+function [] = ES_MC_Plots(tt,x,control_type,Obj_type,N,Tf,J,J_comp,larvicide_type)
 
 % Plots Adult Vector Populations
 

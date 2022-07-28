@@ -1,19 +1,17 @@
-function [tau,ul,ua,X,J,J_comp,final_treatment_time,K] = West_Nile_Control_Wrapper(N,Ka,Tf,Obj_type,larvicide_type,ul,ua)
+function [tau,ul,ua,X,J,J_comp,final_treatment_time,K] = ES_MC_Control_Wrapper(N,Ka,Tf,Obj_type,larvicide_type,ul,ua)
 %This code optimizes the timing of the control and the control level
 %in order to minimize a user selected objective functional. 
 %Obj_type sets the objective functional. Vector control: 1, Disease
 %control:2, Host preservation: 3. 
 %larvicide_type: 1=long-lasting s-methorpene briquet, 2=VectoBac
 
-% test commit -brady
-
-p = System_parametersRL(larvicide_type,Tf);
+p = ES_MC_Parameters(larvicide_type,Tf);
 if Obj_type==1
-f=@(t,x)West_Nile_ModelRL(t,x,p);
+f=@(t,x)ES_MC_Model_Definition(t,x,p);
 end
 
 if Obj_type==2
-f=@(t,x)West_Nile_ModelRL_Disease(t,x,p);
+f=@(t,x)ES_MC_Model_Definition_Disease(t,x,p);
 end
 
 if Obj_type==3
@@ -24,10 +22,10 @@ end
 final_treatment_time_error_b=1;
 %[tau,ul,ua,X,J,J_comp,final_treatment_time_a,X0,T] = West_Nile_Control(N,Ka,Tf);
 if Obj_type==1
-    [tau,ul,ua,X,J,J_comp,final_treatment_time_a,X0,T] = West_Nile_Control_Vector_Control(N,Ka,Tf,larvicide_type);
+    [tau,ul,ua,X,J,J_comp,final_treatment_time_a,X0,T] = ES_MC_Control_Vector_Control(N,Ka,Tf,larvicide_type);
 end
 if Obj_type==2
-    [tau,ul,ua,X,J,J_comp,final_treatment_time_a,X0,T] = West_Nile_Control_Disease_Control(N,Ka,Tf,larvicide_type,ul,ua);
+    [tau,ul,ua,X,J,J_comp,final_treatment_time_a,X0,T] = ES_MC_Disease_Control(N,Ka,Tf,larvicide_type,ul,ua);
 end
 if Obj_type==3
     [tau,ul,ua,X,J,J_comp,final_treatment_time_a,X0,T] = West_Nile_Control_Host_Preservation(N,Ka,Tf,larvicide_type);
@@ -40,10 +38,10 @@ Kb=Ka+.5;
 while abs(final_treatment_time_error_b)>10^(-3)
     %[tau,ul,ua,X,J,J_comp,final_treatment_time_b,X0,T] = West_Nile_Control(N,Kb,Tf);
     if Obj_type==1
-    [tau,ul,ua,X,J,J_comp,final_treatment_time_b,X0,T] = West_Nile_Control_Vector_Control(N,Kb,Tf,larvicide_type);
+    [tau,ul,ua,X,J,J_comp,final_treatment_time_b,X0,T] = ES_MC_Control_Vector_Control(N,Kb,Tf,larvicide_type);
     end
     if Obj_type==2
-    [tau,ul,ua,X,J,J_comp,final_treatment_time_b,X0,T] = West_Nile_Control_Disease_Control(N,Kb,Tf,larvicide_type,ul,ua);
+    [tau,ul,ua,X,J,J_comp,final_treatment_time_b,X0,T] = ES_MC_Disease_Control(N,Kb,Tf,larvicide_type,ul,ua);
     end
     if Obj_type==3
     [tau,ul,ua,X,J,J_comp,final_treatment_time_b,X0,T] = West_Nile_Control_Host_Preservation(N,Kb,Tf,larvicide_type);
@@ -82,7 +80,7 @@ for i=1:N
 end
 %control with optimal schedule
 control_type=2;
-West_Nile_Model_plots(t,x,control_type,Obj_type,N,Tf,J,J_comp, larvicide_type)
+ES_MC_Plots(t,x,control_type,Obj_type,N,Tf,J,J_comp, larvicide_type)
 end
 
 

@@ -1,4 +1,4 @@
-function [tau,ul,ua,X,J,J_comp,final_treatment_time,X0,T] = West_Nile_Control_Vector_Control(N,K,Tf,larvicide_type)
+function [tau,ul,ua,X,J,J_comp,final_treatment_time,X0,T] = ES_MC_Control_Vector_Control(N,K,Tf,larvicide_type)
 %This code optimizes the timing of the control and the control level
 %in order to minimize the density of vectors plus control cost.
 %Initial conditions are set on line 93 as the disease-free equilibrium. 
@@ -82,7 +82,7 @@ delta=10^(-7);
 
 %Model Parameters
 %generate parameters
-p = System_parametersRL(larvicide_type,Tf);
+p = ES_MC_Parameters(larvicide_type,Tf);
 
 c_h1 = p(35); % carrying capacity host group 1
 c_h2 = p(36); % carrying capacity host group 2
@@ -146,7 +146,7 @@ DX=zeros(length(X01),length(X01),N);
 Y=zeros(N,length(ic));
 
 
-f=@(t,x)West_Nile_ModelRL(t,x,p);
+f=@(t,x)ES_MC_Model_Definition(t,x,p);
 
 final_times=[];
 J_values=[];

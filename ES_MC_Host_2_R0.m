@@ -24,16 +24,14 @@ Es = c_l*m_l*rs/(muV*m_e);
 %%%%% F=new infections, V=transfer between compartments 
 %%%% Only need to focus on infection compartments: [Hi1 Hi2 Hi3 Ei Li Ve Vi]
 
-% Ffun=[p_mh*b*Vi+p_hh1*omega1*Hi1, p_mh*b*Vi+p_hh2*omega2*Hi2, p_mh*b*Vi+p_hh3*omega3*Hi3, ri*Vi, 0, b*p_hm1*Vs*Hi1/c_h1+b*p_hm2*Vs*Hi2/c_h2+b*p_hm3*Vs*Hi3/c_h3, 0];
+Ffun=[p_mh*b*Vi+p_hh2*omega2*Hi2, ri*Vi, 0, b*p_hm2*Vs*Hi2/c_h2, 0]
 
-Ffun=[p_mh*b*Vi+p_hh1*omega1*Hi1, ri*Vi, 0, b*p_hm1*Vs*Hi1/c_h1, 0]
-
-Vfun=[-gamma1*Hi1-g1*Hi1-d_h1*Hs1*Hi1-mu_h1*Hi1, -m_e*Ei, m_e*qi*phi*Ei-muL*Li-m_l*Li-d_l*Ls*Li, -kl*Ve-muV*Ve, m_l*Li+kl*Ve-muV*Vi]
+Vfun=[-gamma2*Hi2-g2*Hi2-d_h2*Hs2*Hi2-mu_h2*Hi2, -m_e*Ei, m_e*qi*phi*Ei-muL*Li-m_l*Li-d_l*Ls*Li, -kl*Ve-muV*Ve, m_l*Li+kl*Ve-muV*Vi]
 
 %%%% Compute the jacobian with respect to infection compartments: [Hi1 Ei Li Ve Vi]
 
-FF=jacobian(Ffun, [Hi1 Ei Li Ve Vi]);
-VV=jacobian(Vfun, [Hi1 Ei Li Ve Vi]);
+FF=jacobian(Ffun, [Hi2 Ei Li Ve Vi]);
+VV=jacobian(Vfun, [Hi2 Ei Li Ve Vi]);
 FF
 VV
 
@@ -41,14 +39,14 @@ VV
 %%%% Evaluate FF and VV at disease free equilibrium
 %%%% Only need to set infection compartments [I, As, Is, F, X, Ms, V] as zeros
 
-MatrixF=subs(FF, [Hi1 Ei Li Ve Vi], [0, 0, 0, 0, 0])
-MatrixV=subs(VV, [Hi1 Ei Li Ve Vi], [0, 0, 0, 0, 0])
+MatrixF=subs(FF, [Hi2 Ei Li Ve Vi], [0, 0, 0, 0, 0]);
+MatrixV=subs(VV, [Hi2 Ei Li Ve Vi], [0, 0, 0, 0, 0]);
 
 MatrixF
 MatrixV
 
-% MatrixF = subs(MatrixF, [omega1*p_hh1 (b*c_l*m_l*p_hm1)/(c_h1*muV) b*p_mh ri], [j1 j2 j3 j4])
-% MatrixV = subs(MatrixV, [(-d_h1*c_h3)-g1-gamma1-mu_h1 -m_e m_e*phi*qi (-d_l*c_l)-m_l-muL m_l -kl-muV kl -muV], [n1 n2 n3 n4 n5 n6 n7 n8])
+MatrixF = subs(MatrixF, [omega2*p_hh2 (b*c_l*m_l*p_hm2)/(c_h2*muV) b*p_mh ri], [j1 j2 j3 j4])
+MatrixV = subs(MatrixV, [(-d_h2*c_h2)-g2-gamma2-mu_h2 -m_e m_e*phi*qi (-d_l*c_l)-m_l-muL m_l -kl-muV kl -muV], [n1 n2 n3 n4 n5 n6 n7 n8])
 
 %%%%% Compute F*V^{-1}
 RR=-MatrixF*inv(MatrixV)
@@ -68,7 +66,7 @@ end
 
 %%% set values for parameters. Note the argument is for plotting decay in
 %%% larvicidal effect and does not impact this computation.
-p = System_parametersRL(1,90); % Not quite sure why this goes to 90. 
+p = ES_MC_Parameters(1,90); % Not quite sure why this goes to 90. 
 
 % Model Parameters
 
@@ -94,6 +92,7 @@ p_mh = p(13); % mosquito-to-host transmission
 p_hm1 = p(14); % host-to-mosquito transmission host group 1
 p_hm2 = p(15); % host-to-mosquito transmission host group 2
 p_hm3 = p(16); % host-to-mosquito transmission host group 3
+
 
 omega1 = p(17); % direct transmission rate host group 1
 omega2 = p(18); % direct transmission rate host group 2
@@ -139,123 +138,31 @@ d_h1 = (Lambda1 - mu_h1)/c_h1; % density-dependent death rate for host group 1
 d_h2 = (Lambda2 - mu_h2)/c_h2; % density-dependent death rate for host group 2
 d_h3 = (Lambda3 - mu_h3)/c_h3; % density-dependent death rate for host group 3
 
-%%% New Code: 
+j1 = omega2*p_hh2
+j2 = (b*c_l*m_l*p_hm2)/(c_h2*muV)
+j3 = b*p_mh
+j4 = ri
 
-% For Mosquito:Bird Ratios > 1:
+n1 = (-d_h2*c_h2)-g2-gamma2-mu_h2
+n2 = -m_e
+n3 = m_e*phi*qi
+n4 = (-d_l*c_l)-m_l-muL
+n5 = m_l
+n6 = -kl-muV
+n7 = kl
+n8 = -muV
 
-c_l = 0.001
+%eivenvalues are copied from  eig=solve(p, lambda)
+sol1=double(subs(eigen_values(1)));
+sol2=double(subs(eigen_values(2)));
+sol3=double(subs(eigen_values(3)));
+sol4=double(subs(eigen_values(4)));
+sol5=double(subs(eigen_values(5)));
 
-for n = 1:250
-    t(n) = n;
-    c_l = c_l + 0.0001;
-    c_l_save(n) = c_l;
-    d_l(n)=((rs*m_l*qs/muV)-muL-m_l)/c_l_save(n); % density-dependent death rate for larvae
-    ratio(n) = c_l_save(n)/c_h1;
+sol=[sol1 sol2 sol3 sol4 sol5]
 
-    j1(n) = omega1*p_hh1;
-    j2(n) = (b*c_l_save(n)*m_l*p_hm1)/(c_h1*muV);
-    j3(n) = b*p_mh;
-    j4(n) = ri;
-
-    n1(n) = (-d_h1*c_h1)-g1-gamma1-mu_h1;
-    n2(n) = -m_e;
-    n3(n) = m_e*phi*qi;
-    n4(n) = (-d_l(n)*c_l_save(n))-m_l-muL;
-    n5(n) = m_l;
-    n6(n) = -kl-muV;
-    n7(n) = kl;
-    n8(n) = -muV;
-
-    sol1=double(subs(eigen_values(1)))
-    sol2=double(subs(eigen_values(2)));
-    sol3=double(subs(eigen_values(3)));
-    sol4=double(subs(eigen_values(4)))
-    sol5=double(subs(eigen_values(5)));
-
-    sol=[sol1 sol2 sol3 sol4 sol5];
-
-%     [subR0,max_index]=max(sol);
-%     subR0_save(n) = subR0;
-
-end;
-
-% Graph of R0 vs. Density Ratio
-
-% figure
-% plot(ratio,subR0_save, 'Linewidth', 3)
-% xlabel('Mosquito:Bird Ratio', 'FontSize', 12);
-% ylabel('R0', 'FontSize', 12);
-% title('R0 as a Function of Mosquito:Bird Density for Host Group 1')
-% hold on
-% 
-% file_name=sprintf('R0_WNV_Host_1_Vector_Density_Ratio_Above_1.eps');
-% exportgraphics(gcf,file_name);
-
-% Graph of All Eigenvalues vs. Density Ratio
-
-figure
-plot(ratio,sol1_save,'Linewidth',3)
-hold on
-plot(ratio,sol2_save,'Linewidth',3)
-hold on
-plot(ratio,sol3_save,'Linewidth',3)
-hold on
-plot(ratio,sol4_save,'Linewidth',3)
-hold on
-plot(ratio,sol5_save,'Linewidth',3)
-hold on
-legend('sol1', 'sol2', 'sol3', 'sol4', 'sol5', 'FontSize', 12);
-xlabel('Mosquito:Bird Ratio', 'FontSize', 12);
-ylabel('R0', 'FontSize', 12);
-title('Eigenvalues as a Function of Mosquito:Bird Density for Host Group 1')
-hold off
-
-% file_name=sprintf('Host1_Eigenvalues_Density_Ratio.eps');
-% exportgraphics(gcf,file_name);
-
-% %%% New Code: 
-% 
-% % Graphing all 
-% for n = 1:50
-%     c_l(n) = n*0.001;
-%     d_l(n)=((rs*m_l*qs/muV)-muL-m_l)/c_l(n); % density-dependent death rate for larvae
-%     ratio(n) = c_l(n)/c_h1;
-% 
-%     j1(n) = omega1*p_hh1;
-%     j2(n) = (b*c_l(n)*m_l*p_hm1)/(c_h1*muV);
-%     j3(n) = b*p_mh;
-%     j4(n) = ri;
-% 
-%     n1(n) = (-d_h1*c_h1)-g1-gamma1-mu_h1;
-%     n2(n) = -m_e;
-%     n3(n) = m_e*phi*qi;
-%     n4(n) = (-d_l(n)*c_l(n))-m_l-muL;
-%     n5(n) = m_l;
-%     n6(n) = -kl-muV;
-%     n7(n) = kl;
-%     n8(n) = -muV;
-% 
-%     sol1=double(subs(eigen_values(1)));
-%     sol2=double(subs(eigen_values(2)));
-%     sol3=double(subs(eigen_values(3)));
-%     sol4=double(subs(eigen_values(4)));
-%     sol5=double(subs(eigen_values(5)));
-% 
-%     sol=[sol1 sol2 sol3 sol4 sol5];
-%     [subR0,max_index]=max(sol);
-% 
-%     subR0_save(n) = subR0;
-% 
-% end;
-% 
-% figure
-% plot(ratio,subR0_save, 'Linewidth', 3)
-% xlabel('Mosquito:Bird Ratio', 'FontSize', 12);
-% ylabel('R0', 'FontSize', 12);
-% title('R0 as a Function of Mosquito:Bird Density for Host Group 1')
-% hold on
-% 
-% file_name=sprintf('R0_WNV_Host_1_Vector_Density_Ratio_Above_1.eps');
-% exportgraphics(gcf,file_name);
+% %%%% largest eigenvalue is R0
+[subR0,max_index]=max(sol)
+R0=eigen_values(max_index)
 
 toc;

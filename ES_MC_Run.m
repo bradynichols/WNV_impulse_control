@@ -1,4 +1,4 @@
-function [tt,x] = West_Nile_Model_run(larvicide_type)
+function [tt,x] = ES_MC_Run(larvicide_type)
 % This function simulates a West Nile virus epidemic or mosquito population with no control. 
 % Disease-free or disease-free-equilibrium conditionns are selected by the user prior to running on lines 56-60.
 
@@ -49,7 +49,7 @@ function [tt,x] = West_Nile_Model_run(larvicide_type)
 
 Tf=150;
 
-p = System_parametersRL(larvicide_type,Tf);
+p = ES_MC_Parameters(larvicide_type,Tf);
 
 % Initial conditions for discrete/continuous state variables
 % ic(2)=infected egges, % ic(4)=infected larva, % ic(7)=infected mosquitoes
@@ -83,10 +83,10 @@ X01=ic;
 X02=reshape(eye(length(X01)),length(X01)^2,1);
 X0=[X01; X02];
 
-f=@(t,x)West_Nile_ModelRL(t,x,p);
+f=@(t,x)ES_MC_Model_Definition(t,x,p);
 
 %solve the state equations
 [tt,x]=ode45(f,[0,Tf],X0);
 
-West_Nile_Model_plots(tt,x,0,[],[],Tf,[],[],larvicide_type);
+ES_MC_Plots(tt,x,0,[],[],Tf,[],[],larvicide_type);
 end
