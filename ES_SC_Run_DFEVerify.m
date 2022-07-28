@@ -1,4 +1,4 @@
-function [tt,x] = West_Nile_Model_run(larvicide_type)
+function [tt,x] = ES_SC_Run_DFEVerify(larvicide_type)
 %This function simulates a West Nile virus epidemic or mosquito population
 % with no control. Disease-free or disease-free-equilibrium conditionns 
 % are selected by the user prior to running on lines 56-60.
@@ -24,7 +24,7 @@ function [tt,x] = West_Nile_Model_run(larvicide_type)
 %Artifical State
 %int_0^t{cV*cV*(Vi(s)+Vs(s)+Ve(s)}ds=x(13)
 
-% NH = Hs+Hi+Hr;           %total hosts
+%NH = Hs+Hi+Hr;           %total hosts
 
 
 %The continuous state has 13 components. 
@@ -35,7 +35,7 @@ function [tt,x] = West_Nile_Model_run(larvicide_type)
 %Model Parameters
 %generate parameters
 %Duration of simulation
-Tf=150;
+Tf=2000;
 p = ES_SC_Parameters(larvicide_type,Tf);
 
 % Initial conditions for discrete/continuous state variables
@@ -52,11 +52,13 @@ c_h = p(34);          % host carrying capacity
 ic_V=m_l*c_l/muV;
 ic_E=rs*m_l*c_l/(m_e*muV);
 
+NH=p(22);
+
 % Initial conditions for discrete/continuous state variables
 %healthy, summer ic. starts from DFE%
 %ic = [ic_E;0;C;0;ic_V;0;0;NH;0;0;0;0;0];
 %diseased
-ic = [ic_E;0;c_l;0;ic_V;0;.01*ic_V;c_h;0;0;0;0;0];
+ic = [ic_E;0;c_l;0;ic_V;0;0;NH;0;0;0;0;0];
 
 % Hs1 = c_h1
 % Hs2 = c_h2
