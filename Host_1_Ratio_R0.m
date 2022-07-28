@@ -174,12 +174,6 @@ for n = 1:250
 
     sol=[sol1 sol2 sol3 sol4 sol5];
 
-    sol1_save(n) = sol(1);
-    sol2_save(n) = sol(2);
-    sol3_save(n) = sol(3);
-    sol4_save(n) = sol(4);
-    sol5_save(n) = sol(5);
-
 %     [subR0,max_index]=max(sol);
 %     subR0_save(n) = subR0;
 
