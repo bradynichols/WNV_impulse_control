@@ -71,7 +71,7 @@ delta=10^(-8);
 
 %Model Parameters
 %generate parameters
-p = System_parametersRL(larvicide_type, Tf);
+p = ES_SC_Parameters(larvicide_type, Tf);
 
 %Vector
 rs = p(1);            %intrinsic rate of increase of uninfected mosquitoes
@@ -141,7 +141,7 @@ DX=zeros(length(X01),length(X01),N);
 Y=zeros(N,length(ic));
 
 
-f=@(t,x)West_Nile_ModelRL_Disease(t,x,p);
+f=@(t,x)ES_SC_Model_Definition_Disease(t,x,p);
 
 J_values=[];
 

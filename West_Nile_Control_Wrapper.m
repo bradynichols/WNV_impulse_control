@@ -5,17 +5,17 @@ function [tau,ul,ua,X,J,J_comp,final_treatment_time,K] = West_Nile_Control_Wrapp
 %control:2, Host preservation: 3. 
 %larvicide_type: 1=long-lasting s-methorpene briquet, 2=VectoBac
 
-% test commit -brady
 
-p = System_parametersRL(larvicide_type,Tf);
+p = ES_SC_Parameters(larvicide_type,Tf);
 if Obj_type==1
-f=@(t,x)West_Nile_ModelRL(t,x,p);
+f=@(t,x)ES_SC_Model_Definition(t,x,p);
 end
 
 if Obj_type==2
-f=@(t,x)West_Nile_ModelRL_Disease(t,x,p);
+f=@(t,x)ES_SC_Model_Definition_Disease(t,x,p);
 end
 
+% This one hasn't existed in a while
 if Obj_type==3
 f=@(t,x)West_Nile_ModelRL_Hosts(t,x,p);
 end

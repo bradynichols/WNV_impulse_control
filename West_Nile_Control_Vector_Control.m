@@ -73,7 +73,7 @@ delta=10^(-7);
 
 %Model Parameters
 %generate parameters
-p = System_parametersRL(larvicide_type,Tf);
+p = ES_SC_Parameters(larvicide_type,Tf);
 
 Nh=p(22);
 
@@ -140,7 +140,7 @@ DX=zeros(length(X01),length(X01),N);
 Y=zeros(N,length(ic));
 
 
-f=@(t,x)West_Nile_ModelRL(t,x,p);
+f=@(t,x)ES_SC_Model_Definition(t,x,p);
 
 final_times=[];
 J_values=[];

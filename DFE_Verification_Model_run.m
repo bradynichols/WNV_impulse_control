@@ -36,7 +36,7 @@ function [tt,x] = DFE_Verification_Model_run(larvicide_type)
 %generate parameters
 %Duration of simulation
 Tf=2000;
-p = System_parametersRL(larvicide_type,Tf);
+p = ES_SC_Parameters(larvicide_type,Tf);
 
 % Initial conditions for discrete/continuous state variables
 %ic(2)=infected egges, %ic(4)=infected larva, %ic(7)=infected mosquitoes
@@ -75,7 +75,7 @@ X01=ic;
 X02=reshape(eye(length(X01)),length(X01)^2,1);
 X0=[X01; X02];
 
-f=@(t,x)West_Nile_ModelRL(t,x,p);
+f=@(t,x)ES_SC_Model_Definition(t,x,p);
 
 %solve the state equations
 [tt,x]=ode23(f,[0,Tf],X0);
