@@ -2,7 +2,7 @@
 % Host-to-Host transmission rate and Host-Host contact rate included
 % 07/18/2022 - Updated to include host carrying capacity, p(34)
 
-function [p] = System_parametersRL(larvicide_type, Tf)
+function [p] = ES_SC_Parameters(larvicide_type, Tf)
 %parameter values for simulations
 p=zeros(1,31);
 

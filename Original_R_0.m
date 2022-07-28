@@ -39,7 +39,7 @@ end
 
 %%%set values for parameters. note the argument is for plotting decay in
 %%%larvicidal effect and does not impact this computation.
-p = System_parametersRL(1,90);
+p = ES_SC_Parameters(1,90);
 Nh=p(22);
 %Vector parameters
 rs = p(1);            %intrinsic rate of increase of uninfected mosquitoes

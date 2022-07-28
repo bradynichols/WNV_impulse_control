@@ -42,7 +42,7 @@ for i=1:num_factors
 eigen_values=[eigen_values; solve(pp_factors(i)==0, lambda,'MaxDegree', 5)];
 end
 
-p = System_parametersRL(1,90);
+p = ES_SC_Parameters(1,90);
 Nh=p(22);
 %Vector parameters
 rs = p(1);            %intrinsic rate of increase of uninfected mosquitoes
