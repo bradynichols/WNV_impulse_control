@@ -47,7 +47,9 @@ eigen_values=[eigen_values; solve(pp_factors(i)==0, lambda,'MaxDegree', 5)];
 end
 
 p = ES_SC_Parameters(1,90);
+Nh=p(22);
 
+% Vector parameters
 rs = p(1); % egg laying rate of S and E mosquitoes
 ri = p(2); % egg laying rate of I mosquitoes
 
@@ -65,34 +67,30 @@ muV = p(9); % adult death rate
 b = p(10); % mosquito biting rate
 c_l = p(11); % mosquito larval carrying capacity
 
-kl = p(12); % disease progression in mosquitoes (1/latency period)
+% Disease parameters
 
+kl = p(12); % disease progression in mosquitoes (1/latency period)
 p_mh = p(13); % mosquito-to-host transmission
 p_hm = p(14); % host-to-mosquito transmission
+gamma = p(15); % WNV induced host mortality
+g = p(16); % host recovery rate
+gl = p(17); % larvicide decay rate
+ga = p(18); % adulticide decay rate
+km1 = p(19); % max rate at which larvicide kills larvae
+km2 = p(20); % max rate at which adulticide kills adult vectors
+cV = p(21);                   %weight of cost of vectors in objective functional
 
-omega = p(15) % host-host direct transmission rate
-p_hh = p(16) % host-host contact rate
+Lambda = p(30) % Host birth rate
+mu_h = p(31) % Host natural death rate
+omega = p(32) %Host-to-Host Contact Rate
+p_hh = p(33) %Host-to-Host Transmission Probability
 
-g = p(17); % host recovery rate
-gamma = p(18); % WNV induced host mortality
+c_h = p(34) % Host carrying capacity
 
-Lambda = p(19) % host recruitment rate
-mu_h = p(20) % host natural death rate
-
-c_h = p(21) % host carrying capacity
-
-km1 = p(22); % max rate at which larvicide kills larvae
-gl = p(23); % larvicide decay rate
-
-km2 = p(24); % max rate at which adulticide kills adult vectors
-ga = p(25); % adulticide decay rate
-
-cV = p(26);  % weight of cost of vectors in objective functional
-
-d_l = ((rs*m_l*qs/muV)-muL-m_l)/c_l; % density-dependent death rate for larvae
+d_l=((rs*m_l*qs/muV)-muL-m_l)/c_l; % density-dependent death rate for larvae
 d_h = (Lambda - mu_h)/c_h % density-dependent death rate for host
 
-% eigenvalues are copied from  eig=solve(p, lambda)
+%%%%eivenvalues are copied from  eig=solve(p, lambda)
 sol1=double(subs(eigen_values(1)));
 sol2=double(subs(eigen_values(2)));
 sol3=double(subs(eigen_values(3)));

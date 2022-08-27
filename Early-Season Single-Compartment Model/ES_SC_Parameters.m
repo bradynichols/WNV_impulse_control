@@ -1,21 +1,25 @@
-% Updated 07/28/2022
+% Updated 08/27/2022
 % For citations regarding vector parameters, please refer to comments in West Nile code written by Dr. Wandi Ding and Dr. Rachel Leander.
 
 function [p] = ES_SC_Parameters(larvicide_type, Tf)
-%parameter values for simulations
+
+% parameter values for simulations
 p=zeros(1,33);
 
 % VECTOR PARAMETERS
 
-p(1)=150/8; % egg laying rate of S and E mosquitoes
-p(2)=100/8; % egg laying rate of I mosquitoes
+p(1) = 150/8; % egg laying rate of S and E mosquitoes
+p(2) = 100/8; % egg laying rate of I mosquitoes
+
 p(3) = 0.003; % fraction of eggs infected
 
-p(4)=.56; % fraction of eggs laid by uninfected mosquitoes that hatch
-p(5)=.43; % fraction of eggs laid by infected mosquitoes that hatch
+p(4) = .56; % fraction of eggs laid by uninfected mosquitoes that hatch
+p(5) = .43; % fraction of eggs laid by infected mosquitoes that hatch
 
-p(6) = 1/2; % egg maturation rate  
+p(6) = 1/2; % hatch rate  
+
 p(7) = 1/7; % larval maturation rate (1/larval lifespan)
+            % Here we combine the larval and pupal stages. 
 
 p(8) = 0.16; % Daily death rate of 1-3% of larvae!                
              % Larval stage survival varied between 70-90%. 
@@ -26,25 +30,24 @@ p(9) = 1/10.4; % adult death rate (1/adult lifespan)
 
 p(10) = 1/5; % mosquito biting rate.
 
-p(11)=.01; % mosquito larval carrying capacity.  
+p(11) = .01; % mosquito larval carrying capacity.  
    
-p(12) = 1/10;  %disease progression in mosquitoes (1/latency period)
+p(12) = 1/10; % disease progression in mosquitoes (1/latency period)
 
-p(13) = 0.5;   %mosquito-to-host transmission
+p(13) = 0.5; % mosquito-to-host transmission
 
 % HOST PARAMETERS
 
-p(14) = 0.3111312377; % host-to-mosquito transmission CHECK EXCEL
+p(14) = 0.3111312377; % host-to-mosquito transmission
 
-p(15) = 0.02960806276; % host-host direct transmission CHECK EXCEL
-
-p(16) = 2.5768/7; % host-host contact rate CHECK EXCEL
+p(15) = 0.02960806276; % host-host direct transmission
+p(16) = 2.5768/7; % host-host contact rate
                   % number in typical flock of those species that can transmit WNV horizontally/typical viremic period.
 
-p(17) = 0.1121256665; % host recovery parameter CHECK EXCEL
+p(17) = 0.1121256665; % host recovery parameter
                       % (1/infection period)*proportion recovered 
 
-p(18) = 0.01672790387; % WNV-induced death rate
+p(18) = 0.01672790387; % WNV induced host mortality
 
 p(19) = 0.003952915781; % host recruitment rate
 
@@ -52,7 +55,7 @@ p(20) = 0.001993512447; % host natural death rate
 
 p(21) = 0.0015; % host carrying capacity
 
-% INSECTICIDE PARAMETERS
+% INSECTICIDE PARAMETERS 
 
 % 1 CORRESPONDS TO METHOPRENE
 if larvicide_type == 1

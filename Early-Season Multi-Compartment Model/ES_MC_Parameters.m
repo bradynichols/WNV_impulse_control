@@ -13,12 +13,12 @@ p(2) = 100/8; % egg laying rate of I mosquitoes
 
 p(3) = 0.003; % fraction of eggs infected
 
-p(4)=.56; % fraction of eggs laid by uninfected mosquitoes that hatch
-p(5)=.43; % fraction of eggs laid by infected mosquitoes that hatch
+p(4) = .56; % fraction of eggs laid by uninfected mosquitoes that hatch
+p(5) = .43; % fraction of eggs laid by infected mosquitoes that hatch
 
 p(6) = 1/2; % hatch rate  
 
-p(7) = 1/7; % larval maturation rate (1/larval lifespan) cite MosquitoLifecycleFINAL.
+p(7) = 1/7; % larval maturation rate (1/larval lifespan)
             % Here we combine the larval and pupal stages. 
 
 p(8) = 0.16; % Daily death (of larvae) rate of 1 - 3%.                   
@@ -29,9 +29,9 @@ p(8) = 0.16; % Daily death (of larvae) rate of 1 - 3%.
 p(9) = 1/10.4; % adult death rate (1/adult lifespan)
                % female mosquitoes have a life expectancy of 3-7 days in the wild
 
-p(10) = 1/5; % mosquito biting rate. It seems reasonable to assume a female mosquito will take a blood meal every 5 days.
-                  
-p(11)=.01; % mosquito larval carrying capacity. 
+p(10) = 1/5; % mosquito biting rate. 
+
+p(11) = .01; % mosquito larval carrying capacity. 
 
 p(12) = 1/10; % disease progression in mosquitoes (1/latency period)
 
@@ -50,13 +50,15 @@ p(17) = 0; % direct transmission host group 1
 p(18) = 0; % direct transmission host group 2
 p(19) = 0.1590100415; % direct transmission host group 3
 
-p(20) = 0; % contact rate host group 1
-p(21) = 0; % contact rate host group 2
-p(22) = 9.202857143/7; % contact rate host group 3
+p(20) = 0; % host-host contact rate host group 1
+p(21) = 0; % host-host contact rate host group 2
+p(22) = 9.202857143/7; % host-host contact rate host group 3
+                       % number in typical flock of those species that can transmit WNV horizontally/typical viremic period.
 
 p(23) = 0.1429; % WNV recovery host group 1
 p(24) = 0.1018258535; % WNV recovery host group 2
 p(25) = 0.0602776217; % WNV recovery host group 3
+                       % (1/infection period)*proportion recovered 
 
 p(26) = 0; % WNV death host group 1
 p(27) = 0.03519053473; % WNV death host group 2
@@ -95,7 +97,7 @@ end
 
 % 2 CORRESPONDS TO VECTOBAC
 if larvicide_type == 2
-%%%%%%%Computation of p(38) and p(39) for vectobac%%%%%%%
+%%%%%%%Computation of p(40) and p(41) for vectobac%%%%%%%
 
 min_ef = .22;
 min_ef_day = 42;
