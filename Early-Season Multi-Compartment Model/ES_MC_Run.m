@@ -1,6 +1,6 @@
 function [tt,x] = ES_MC_Run(larvicide_type)
 % This function simulates a West Nile virus epidemic or mosquito population with no control. 
-% Disease-free or disease-free-equilibrium conditionns are selected by the user prior to running on lines 56-60.
+% Disease-free or disease-free-equilibrium conditions are selected by the user prior to running on lines 56-60.
 
 % Vector
 

@@ -21,15 +21,15 @@ x2=reshape(x2,length(x1),length(x1));
 %Model Parameters
 
 %Vector
-rs = p(1);            %intrinsic rate of increase of uninfected mosquitoes
-ri = p(2);           %intrinsic rate of increase of infected mosquitoes
-phi=p(3);               %fraction of eggs born to infected mothers that are infected
-qs=p(4);                %fraction of eggs from uninfected mosquitoes that hatch
-qi=p(5);                %fraction of eggs laid to infected mosquitoes that hatch
-m_e = p(6);              %egg maturatation rate
-m_l = p(7);             %larval maturation rate
+rs = p(1); % egg laying rate of S and E mosquitoes
+ri = p(2); % egg laying rate of I mosquitoes
+phi=p(3); % fraction of eggs infected
+qs=p(4); % fraction of eggs laid by uninfected mosquitoes that hatch
+qi=p(5); % fraction of eggs laid by infected mosquitoes that hatch
+m_e = p(6); % egg maturatation rate
+m_l = p(7); % larval maturation rate
 
-muL = p(8);           %larval death rate
+muL = p(8); %larval death rate
 muV=p(9);             %adult death rate
 b = p(10);             %mosquito biting rate
 c_l = p(11);             %mosquito carrying capacity
@@ -105,22 +105,6 @@ d_h = (Lambda - mu_h)/c_h; % density-dependent death rate for host
     dx_int=(Vi+Hi);
 
 f=[dEs; dEi; dLs; dLi; dVs; dVe; dVi; dHs; dHi; dHr; dUl; dUa; dx_int];
-
-% Updated to include host demographics:
-
-% dfdx=[ -m_e, 0, 0, 0, rs, rs, 0, 0, 0, 0, 0, 0, 0;
-%         0, -m_e, 0, 0, 0, 0, ri, 0, 0, 0, 0, 0, 0;
-%       m_e*qs, m_e*qi*(1-phi), -muL-m_l-km1*Ul-2*d*Ls-d*Li, -d*Ls, 0, 0, 0, 0, 0, 0, -km1*Ls, 0, 0;
-%  0, m_e*qi*phi, -d*Li, -muL-m_l-km1*Ul-2*d*Li-d*Ls, 0, 0, 0, 0, 0, 0, -km1*Li, 0, 0;
-%  0, 0, m_l, 0, -b*p_hm*Hi/NH-muV-km2*Ua, 0, 0, b*p_hm*Vs*Hi/(NH)^2, -b*p_hm*Vs/(NH)+b*p_hm*Vs*Hi/(NH)^2, b*p_hm*Vs*Hi/(NH)^2, 0, -km2*Vs, 0;
-%  0, 0, 0, 0, b*p_hm*Hi/NH, -kl-muV-km2*Ua, 0, -b*p_hm*Vs*Hi/(NH)^2, b*p_hm*Vs/(NH)-b*p_hm*Hi*Vs/(NH)^2, -b*p_hm*Vs*Hi/(NH)^2, 0, -km2*Ve, 0;
-%  0, 0, 0, m_l, 0, kl, -muV-km2*Ua, 0, 0, 0, 0, -km2*Vi, 0;
-%  0, 0, 0, 0, 0, 0, -b*p_mh*Hs/NH, Lambda - gamma - Hs*d_h - d_h*(NH) - (Hi*omega*p_hh)/(NH) - (Vi*b*p_mh)/(NH) + (Hi*Hs*omega*p_hh)/(NH)^2 + (Hs*Vi*b*p_mh)/(NH)^2, (Hi*Hs*omega*p_hh)/(NH)^2 - (Hs*omega*p_hh)/(NH) - Hs*d_h + (Hs*Vi*b*p_mh)/(NH)^2, (Hi*Hs*omega*p_hh)/(NH)^2 - Hs*d_h + (Hs*Vi*b*p_mh)/(NH)^2, 0, 0, 0; % Hs updated 07-19-2022
-%  0, 0, 0, 0, 0, 0, b*p_mh*Hs/NH, (Hi*omega*p_hh)/(NH) - d_h*(NH) - Hs*d_h + (Vi*b*p_mh)/(NH) - (Hi*Hs*omega*p_hh)/(NH)^2 - (Hs*Vi*b*p_mh)/(NH)^2, (Hs*omega*p_hh)/(NH) - g - gamma - Hs*d_h - dh - (Hi*Hs*omega*p_hh)/(NH)^2 - (Hs*Vi*b*p_mh)/(NH)^2, - Hs*d_h - (Hi*Hs*omega*p_hh)/(NH)^2 - (Hs*Vi*b*p_mh)/(NH)^2, 0, 0, 0; % Hi updated 07-19-2022
-%  0, 0, 0,  0,  0,  0,  0,  - Hs*d_h - d_h*(NH),  g - Hs*d_h,  - gamma - Hs*d_h,  0,  0,  0; % Hr updated 07/19/2022.
-%  0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  -gl, 0, 0;
-%  0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  0,  -ga,  0; 
-%  0, 0, 0,  0,  0,  0,  1,  0,  1,  0,  0,  0,  0];
 
 dfdx = [  -m_e,                 0,                                             0,                                             0,                                          rs,                  rs,                           0,                                                                                                                                                                                 0,                                                                                                                                                       0,                                                                                       0,       0,       0, 0;
      0,              -m_e,                                             0,                                             0,                                           0,                   0,                          ri,                                                                                                                                                                                 0,                                                                                                                                                       0,                                                                                       0,       0,       0, 0;
